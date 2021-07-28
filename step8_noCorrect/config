@@ -1,0 +1,4 @@
+# Mutect2 Filters
+tlod = 5.3 	# default mutect2 setting for variant call log-odds
+dp = 10	# minimal depth in exome sequencing file
+ecnt = 1	# minimal number of supporting variant alleles

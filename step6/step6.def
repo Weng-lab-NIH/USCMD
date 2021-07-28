@@ -1,0 +1,103 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    base.image ubuntu:latest
+    version 1
+
+%environment
+    export PATH="$PATH:/gatk-4.1.0.0"
+    export LC_ALL="en_US.UTF-8"
+    export LC_CTYPE="en_US.UTF-8"
+
+%setup
+    touch step6.R
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get -y -q update
+    apt-get -y -q install wget
+    apt-get -y -q install unzip
+    apt-get -y -q install build-essential 
+    apt-get -y -q install parallel
+    apt-get -y -q install bamtools
+    apt-get -y -q install bowtie2
+    apt-get -y -q install bwa
+    apt-get -y -q install cutadapt
+    apt-get -y -q install fastqc
+    apt-get -y -q install curl
+    apt-get -y -q install python-is-python3
+    apt-get -y -q install python3-pip
+    apt-get -y -q install locales-all
+    
+    ############# STEP 6 SNPEFF THINGS
+    # snpEFF
+    wget -P / https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
+    unzip /snpEff_latest_core.zip
+    pip3 install azure-storage-blob==2.1.0 
+
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/step6.R
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/call_step6.sh
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/call_step6_custom.sh
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/step6.def
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/step6_azurescript.py # use azurestorage to download needed snpEff reference database
+    wget -P / https://raw.githubusercontent.com/JeffreyCifello/test/main/step6/readme.txt
+
+    python /step6_azurescript.py
+    unzip /snpEff_v5_0_GRCh38.99.zip -d /snpEff
+    #############
+
+    #samtools dependecies
+    apt-get -y -q install autoconf automake make gcc perl zlib1g-dev libbz2-dev liblzma-dev libcurl4-gnutls-dev libssl-dev libncurses5-dev
+    #samtools
+    #wget -P / https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2
+    #tar -vxjf samtools-1.11.tar.bz2
+    #cd samtools-1.11
+    #./configure
+    #make
+    #make install
+    cd /
+
+    #installing R
+    apt-get -y -q install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+    apt-get -y -q install r-base
+
+    #install R packages
+    #tidyverse dependencies
+    apt-get install -y -q libxml2-dev libcurl4-openssl-dev libssl-dev
+    #tidyverse itself
+    R --slave -e 'install.packages("tidyverse")'
+    R --slave -e 'install.packages("R.utils")'
+    R --slave -e 'install.packages("argparse")'
+
+
+    #gatk
+    wget -P / https://github.com/broadinstitute/gatk/releases/download/4.1.0.0/gatk-4.1.0.0.zip
+    unzip gatk-4.1.0.0
+    cd /
+
+
+%test
+    export PATH="$PATH:/gatk-4.1.0.0"
+    grep -q NAME=\"Ubuntu\" /etc/os-release
+
+    if [ $? -eq 0 ]; then
+        echo "Container base is Ubuntu as expected."
+        ls -a /
+        gcc --version
+        java -version
+        cutadapt --version
+        fastqc -v
+        #trim_galore --help
+        gatk --help
+
+        R --version
+        R --slave -e 'library("tidyverse")'
+
+        java -jar /snpEff/snpEff.jar -version
+
+    else
+        echo "Container base is not Ubuntu."
+    fi

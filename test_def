@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    base.image ubuntu:latest
+    version 1
+
+%files
+    python_test.py python_transferred.py
+
+%post
+    apt-get -y update
+    #apt-get install -y wget
+    #wget -P / ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.11.0+-x64-linux.tar.gz 
+    #wget -P / ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.11.0+-x64-linux.tar.gz.md5
+
+    ## download md5run to check the downloads
+    #apt-get install -y ucommon-utils
+
+    ## check the download if it is ok. 
+    #md5sum --check /ncbi-blast-2.11.0+-x64-linux.tar.gz.md5
+
+    ## install tar to deal with compressed files. 
+    #apt-get install  -y tar
+
+    ## uncompress 
+    #tar -zxvf /ncbi-blast-2.11.0+-x64-linux.tar.gz 
+
+%test
+    grep -q NAME=\"Ubuntu\" /etc/os-release
+    if [ $? -eq 0 ]; then
+        echo "Container base is Ubuntu as expected."
+        ls /
+    else
+        echo "Container base is not Ubuntu."
+    fi
+
