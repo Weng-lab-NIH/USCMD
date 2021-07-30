@@ -38,11 +38,11 @@ mkdir -p ${out}/${sample}
 # READ IN TAGS - PIPE INTO GNU PARALLEL :
 #                       SPLIT BAM INTO SINGLE CELLS BAM Files
 echo precat
-cat ${barcode_list} | parallel --jobs $num_cores bamtools filter -in ${bigbam} -out ${out}/${sample}/${sample}_{}.bam -tag ${tname}:{}
+cat ${barcode_list} | parallel --jobs $num_cores bamtools filter -in ${bigbam} -out ${out}/${sample}/${sample}.bam -tag ${tname}:{}
 echo cat1 done
-cat ${barcode_list} | parallel --jobs $num_cores samtools sort ${out}/${sample}/${sample}_{}.bam
+cat ${barcode_list} | parallel --jobs $num_cores samtools sort ${out}/${sample}/${sample}.bam
 echo cat2 done
-cat ${barcode_list} | parallel --jobs $num_cores samtools index ${out}/${sample}/${sample}_{}.bam
+cat ${barcode_list} | parallel --jobs $num_cores samtools index ${out}/${sample}/${sample}.bam
 echo cat3 done
 LEN=$(wc -w < ${barcode_list})
 
