@@ -1,4 +1,4 @@
-STEP 8 README
+STEP 10 README
 
 TITLE: Exome depth and coverage
 PURPOSE: Acquire total exome depth, coverage, and reads to evaluate sequencing success.
