@@ -80,13 +80,13 @@ mkdir .tmp
  
 cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 | parallel --progress --jobs ',num_cores,' gatk --java-options "\'-Xmx1G\'" AddOrReplaceReadGroups \\
--I ${scBAM}/${SAMPLE}.bam \\
--O .tmp/${SAMPLE}_UMI_SM.bam \\
--ID ${SAMPLE} \\
+-I ${scBAM}/${SAMPLE}_{}.bam \\
+-O .tmp/${SAMPLE}_{}_UMI_SM.bam \\
+-ID ${SAMPLE}_{} \\
 -LB MissingLibrary \\
 -PL ILLUMINA \\
--PU ${SAMPLE} \\
--SM ${SAMPLE}
+-PU ${SAMPLE}_{} \\
+-SM ${SAMPLE}_{}
 
 # cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 # | parallel --progress --jobs ',num_cores,' samtools index \\
@@ -95,25 +95,25 @@ cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 | parallel --jobs ',num_cores,' gatk --java-options "\'-Xmx8g -XX:+UseConcMarkSweepGC\'" SplitNCigarReads \\
 -R ${REF} \\
--I .tmp/${SAMPLE}_UMI_SM.bam \\
--O .tmp/${SAMPLE}_UMI_SM_ST.bam
+-I .tmp/${SAMPLE}_{}_UMI_SM.bam \\
+-O .tmp/${SAMPLE}_{}_UMI_SM_ST.bam
 
 cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 | parallel --jobs ',num_cores,' gatk --java-options "\'-Xmx8g -XX:+UseConcMarkSweepGC\'" Mutect2 \\
 -R ${REF_VAR}/${SAMPLE}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa \\
--I .tmp/${SAMPLE}_UMI_SM_ST.bam \\
+-I .tmp/${SAMPLE}_{}_UMI_SM_ST.bam \\
 -I ${BIGBAM} \\
--tumor ${SAMPLE} \\
+-tumor ${SAMPLE}_{} \\
 -normal ${SAMPLE}_combined \\
 -DF MappingQualityAvailableReadFilter \\
 -DF MappingQualityReadFilter \\
 -DF MappingQualityNotZeroReadFilter \\
--O .tmp/${SAMPLE}_var.vcf
+-O .tmp/${SAMPLE}_{}_var.vcf
 
 cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 | parallel --jobs ',num_cores,' gatk --java-options "\'-Xmx4g -XX:+UseConcMarkSweepGC\'" FilterMutectCalls \\
--V .tmp/${SAMPLE}_var.vcf \\
--O ${DIR_O}/${SAMPLE}_var_FLTR.vcf \\
+-V .tmp/${SAMPLE}_{}_var.vcf \\
+-O ${DIR_O}/${SAMPLE}_{}_var_FLTR.vcf \\
 --tumor-lod 5.3 \\
 --disable-tool-default-read-filters \\
 --min-median-base-quality 0 \\
