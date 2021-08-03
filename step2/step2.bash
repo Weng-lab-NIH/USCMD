@@ -34,6 +34,7 @@ while [ $# -gt 0 ]; do
 done
 
 mkdir -p ${out}/${sample}
+rm -f ${out}/reads.csv
 
 # READ IN TAGS - PIPE INTO GNU PARALLEL :
 #                       SPLIT BAM INTO SINGLE CELLS BAM Files
