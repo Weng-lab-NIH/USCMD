@@ -31,3 +31,4 @@ $num_cores
 for i in $(ls ${scripts_dir}/VARIANTS*bash); do
   bash $i
 done
+
