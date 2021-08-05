@@ -126,6 +126,7 @@ for i in $( seq 1 ${LEN} ); do
 TAG=`awk "NR==$i" ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL}`
 VART=$(cat .tmp/${SAMPLE}_${TAG}_var.vcf | wc -l)
 VAR=$(cat  ${DIR_O}/${SAMPLE}_${TAG}_var_FLTR.vcf | grep "PASS" | wc -l)
+VAR="$((VAR-1))"
 READ_SAM=$(samtools view -c -F 4 ${scBAM}/${SAMPLE}_${TAG}.bam)
 UMI=$(samtools view  ${scBAM}/${SAMPLE}_${TAG}.bam | grep -o \'UB:............\' | grep -o \'..........$\' | uniq -c | wc -l)
 COV=$(samtools mpileup ${scBAM}/${SAMPLE}_${TAG}.bam | awk -v X="${MIN_COVERAGE_DEPTH}" \'$4>=X\' | wc -l)
