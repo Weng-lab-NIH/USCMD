@@ -45,5 +45,7 @@ gatk --java-options "-Xmx1G" SelectVariants \
 
 cat ${ref_file} | bcftools consensus ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP.vcf.gz > ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa
 samtools faidx ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa
+
+rm -r ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.dict
 gatk CreateSequenceDictionary -R ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa -O ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.dict
 
