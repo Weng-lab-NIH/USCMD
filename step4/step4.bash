@@ -36,7 +36,7 @@ gatk --java-options "-Xmx1G" VariantFiltration \
 awk -F '\t' '{if($0 ~ /\#/) print; else if($7 == "PASS") print}' ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR.vcf > ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS.vcf
 
 Rscript ${filter_snp_script} ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS.vcf ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
-gunzip ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
+yes | gunzip ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
 
 gatk --java-options "-Xmx1G" SelectVariants \
   -V ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf \
