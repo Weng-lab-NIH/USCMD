@@ -15,7 +15,7 @@ done
 
 LEN=$(wc -w < ${donor_csv})
 
-for i in $( seq 1 ${LEN} ); do
+for i in $( seq 2 ${LEN} ); do
 echo $i
 TAG=`awk -F, "NR==$i {print \\\$1}" ${donor_csv}`
 READ_EXOME=$(samtools view -c -F 4 -L /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam)
