@@ -34,7 +34,13 @@ for (i in 1:length(sample_cells)) {
   b <- sample_cells[i]
   filename <- paste(annotate_out, '/',sam,'_',b,'_var.ann.vcf', sep = '')
 
-  one_cell <- read.table(filename,sep="\t")
+  one_cell <- tryCatch({read.table(filename,sep="\t")},
+    error=function(cond) {
+      print(paste("couldn't read ", filename, "skipping to next."))
+    })
+  if(!inherits(one_cell, "error")){
+    next
+  }
   one_cell$V1 <- as.character(one_cell$V1)
   one_cell$V2 <- as.numeric(one_cell$V2)
   one_cell$V3 <- as.character(one_cell$V3)
