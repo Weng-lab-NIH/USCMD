@@ -30,6 +30,9 @@ names(donors) <- sample_cells
 master.annotate <- data.frame(V1="", V2="", V3=0, V4="", V5="", V6="", V7="", 
                               V8="", V9="", V10="", V11="", donor="", barcode="",
                               stringsAsFactors=FALSE)
+
+print("right before for loop")
+print(length(sample_cells))
 for (i in 1:length(sample_cells)) {
   b <- sample_cells[i]
   filename <- paste(annotate_out, '/',sam,'_',b,'_var.ann.vcf', sep = '')
@@ -37,8 +40,10 @@ for (i in 1:length(sample_cells)) {
   one_cell <- tryCatch({read.table(filename,sep="\t")},
     error=function(cond) {
       print(paste("couldn't read ", filename, "skipping to next."))
+      return("error")
     })
-  if(!inherits(one_cell, "error")){
+  if(one_cell=="error"){
+    print('here')
     next
   }
   one_cell$V1 <- as.character(one_cell$V1)
@@ -59,6 +64,8 @@ for (i in 1:length(sample_cells)) {
 }
 
 # mutations_reformat <- Reformat_Annotated_Aggregated_VCF(listcl)
+print("master.annotate")
+print(master.annotate)
 listcl <- master.annotate %>% 
   mutate(ref_len = nchar(V4), alt_len = nchar(V5)) %>%
   filter(ref_len == 1 & alt_len == 1) %>% 
