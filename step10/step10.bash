@@ -13,8 +13,6 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-LEN=$(wc -w < ${donor_csv})
-
 for i in $( seq 2 ${LEN} ); do
 echo $i
 TAG=${sample_id}
