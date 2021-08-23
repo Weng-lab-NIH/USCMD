@@ -13,11 +13,14 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+rm -f ${output_dir}/summary.csv
+
 TAG=${sample_id}
 file ${exome_sc}/${TAG}_SM_bwa.bam
 READ_EXOME=$(samtools view -c -F 4 -L /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam)
 READ_SAM=$(samtools view -c -F 4 ${exome_sc}/${TAG}_SM_bwa.bam)
 COV_EXOME=$(samtools depth -b /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam | wc -l)
 COV=$(samtools depth ${exome_sc}/${TAG}_SM_bwa.bam | wc -l)
-echo $TAG, $READ_EXOME, $READ_SAM, $COV_EXOME, $COV >> ${output_dir}/summary.csv
+UMI=$(samtools view ${exome_sc}/${TAG}_SM_bwa.bam | grep -o 'UB:............' | grep -o '..........$' | uniq -c | wc -l)
+echo $TAG, $READ_EXOME, $READ_SAM, $COV_EXOME, $COV, $UMI >> ${output_dir}/summary.csv
 
