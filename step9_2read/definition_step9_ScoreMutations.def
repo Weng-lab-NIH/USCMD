@@ -1,0 +1,63 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    base.image ubuntu:20.04
+    version 1
+
+%setup
+
+%environment
+
+%post
+
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get -y -q update
+    apt-get -y -q install git
+    apt-get -y -q install wget
+    apt-get -y -q install unzip
+    apt-get -y -q install build-essential 
+    apt-get -y -q install curl
+    apt-get -y -q install python-is-python3
+    apt-get -y -q install dos2unix
+    
+    #installing R
+    apt-get -y -q install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+    apt-get -y -q install r-base
+
+    #install R packages
+    #tidyverse dependencies
+    apt-get install -y -q libxml2-dev libcurl4-openssl-dev libssl-dev
+    #tidyverse install
+    R --slave -e 'install.packages("tidyverse")'
+    #stringr install
+    R --slave -e 'install.packages("stringr")'
+
+    #get our files from git repo
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9/VariantCalling_functions_2.R
+    dos2unix VariantCalling_functions_2.R
+    chmod +x VariantCalling_functions_2.R
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9/step9.bash
+    dos2unix step9.bash
+    chmod +x step9.bash
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9/step9_ScoreMutations.R
+    dos2unix step9_ScoreMutations.R
+    chmod +x step9_ScoreMutations.R
+
+%test
+    grep -q NAME=\"Ubuntu\" /etc/os-release
+
+    if [ $? -eq 0 ]; then
+        echo "Container base is Ubuntu as expected."
+        ls -a /
+        gcc --version
+        
+        R --version
+        R --slave -e 'library("tidyverse")'
+        R --slave -e 'library("stringr")'
+        
+    else
+        echo "Container base is not Ubuntu."
+    fi
