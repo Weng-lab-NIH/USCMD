@@ -13,12 +13,10 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-for i in $( seq 2 ${LEN} ); do
-echo $i
 TAG=${sample_id}
 READ_EXOME=$(samtools view -c -F 4 -L /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam)
 READ_SAM=$(samtools view -c -F 4 ${exome_sc}/${TAG}_SM_bwa.bam)
 COV_EXOME=$(samtools depth -b /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam | wc -l)
 COV=$(samtools depth ${exome_sc}/${TAG}_SM_bwa.bam | wc -l)
 echo $TAG, $READ_EXOME, $READ_SAM, $COV_EXOME, $COV >> ${output_dir}/summary.csv
-done
+
