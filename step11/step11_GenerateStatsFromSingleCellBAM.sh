@@ -24,7 +24,7 @@ do
     echo read_exome done
     READ_SAM=$(samtools view -c -F 4 ${Sample})
     echo read_sam done
-    UMI=$(samtools view  ${Sample} | grep -o \'UB:............\' | grep -o \'..........$\' | uniq -c | wc -l)
+    UMI=$(samtools view  ${Sample} | grep -o 'UB:............' | grep -o '..........$' | uniq -c | wc -l)
     echo umi done
     COV_EXOME=$(samtools depth -b ${Targets} ${Sample} | wc -l)
     echo cov_exome done
