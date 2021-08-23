@@ -70,8 +70,8 @@ score.mutations <- function(mutations, point, read) {
     
     # Filter mutations for candidates for correction:
     filter.mutect <- mutations %>%
-      #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
-      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 2, 'pass', 'fail')) %>%
+      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
+      #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 2, 'pass', 'fail')) %>%
       filter(mutect_filter == 'pass') %>%
       dplyr::select(bc,Chr,POS,ALT,mutect_filter)
     mutations.filtered <- mutations.filtered %>% left_join(filter.mutect, by = c('bc','Chr','POS','ALT'))
