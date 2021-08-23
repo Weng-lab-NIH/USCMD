@@ -36,13 +36,13 @@ From: ubuntu:latest
     R --slave -e 'install.packages("stringr")'
 
     #get our files from git repo
-    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2/VariantCalling_functions_2.R
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2read/VariantCalling_functions_2.R
     dos2unix VariantCalling_functions_2.R
     chmod +x VariantCalling_functions_2.R
-    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2/step9.bash
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2read/step9.bash
     dos2unix step9.bash
     chmod +x step9.bash
-    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2/step9_ScoreMutations.R
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step9_2read/step9_ScoreMutations.R
     dos2unix step9_ScoreMutations.R
     chmod +x step9_ScoreMutations.R
 
