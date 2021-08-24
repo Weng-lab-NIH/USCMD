@@ -16,7 +16,7 @@ while [ $# -gt 0 ]; do
 done
 
 #set -o xtrace
-
+rm -r  ${Outdir}/mutations.csv
 for Sample in ${DataDirectory}/*.bam
 do
     echo arguments read in
