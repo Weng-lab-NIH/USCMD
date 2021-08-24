@@ -22,3 +22,4 @@ echo out_dir: ${out_dir}
 # GENERATE MUTATION SCORES:
 
 Rscript /step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${out_dir}
+Rscript /get_double_variant_positions.R ${out_dir}/ScoredMutations.csv ${out_dir}/double_variant_positions.R
