@@ -16,7 +16,6 @@ done
 rm -f ${output_dir}/summary.csv
 
 TAG=${sample_id}
-file ${exome_sc}/${TAG}_SM_bwa.bam
 READ_EXOME=$(samtools view -c -F 4 -L /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam)
 READ_SAM=$(samtools view -c -F 4 ${exome_sc}/${TAG}_SM_bwa.bam)
 COV_EXOME=$(samtools depth -b /targets_chr.bed ${exome_sc}/${TAG}_SM_bwa.bam | wc -l)
