@@ -116,7 +116,7 @@ score.mutations <- function(mutations, point, read) {
     # Remove point mutations with fewer than 50% of supporting reads in a UMI:
     # (These are likely errors)
     read.umi.fraction.filter <- filter.reads.in.umi %>% 
-      ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads, by = c('bc','umi')) %>%
+      ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads.filter, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT) %>%
       summarise(num = n(), verbose = F) %>%
       group_by(bc,Chr,POS,umi) %>%
@@ -131,7 +131,7 @@ score.mutations <- function(mutations, point, read) {
     
     print('umi_fraction filter complete.')
     
-    ## get recovered double mutations, and add these. 
+    ## get recovered double mutations, and add these. Remove found variants already detected by mutect. 
     double.mutations <- mutate(double.mutations, ALT=ALT.sc) %>% 
       dplyr::select(-ALT.sc) %>%
       left_join(mutate(mutations.filtered, is_original=TRUE), by=c("bc", "Chr", "POS", "ALT", "REF")) %>% # add column to indicate which mutations are recovered
@@ -150,7 +150,7 @@ score.mutations <- function(mutations, point, read) {
 
 
 get.unfiltered.doubles <- function(mutations, point, read) {
-  mutations <- mutate(mutations, bc=paste0(bc, "-1"))
+  #mutations <- mutate(mutations, bc=paste0(bc, "-1"))
   ## the same UMI correction, but do not enforce mutect filtering requirements. (tlod, dp, ecnt)
   ## Only save the positions with exactly 2 bases present. These will be returned. 
   require(tidyverse) 
@@ -227,8 +227,8 @@ get.unfiltered.doubles <- function(mutations, point, read) {
       distinct(bc, Chr, POS, has.two.filter)
 
     mutations <- inner_join(mutations, joining.count.filter, by=c("bc", "Chr", "POS")) %>%
-      distinct(bc, Chr, POS, REF, ALT.sc) # get the specific mutations that are doubled up
-
+      distinct(bc, Chr, POS, REF, ALT.sc) %>% # get the specific mutations that are doubled up
+      filter(ALT.sc!=REF)
     return(mutations)
   }
 
