@@ -1,24 +1,24 @@
 
 Parse_VCF_File <- function(path) {
 
-	require(tidyverse)
+  require(tidyverse)
 
-	vcf <- read.table(path,sep="\t")
-	vcf$V1 <- as.character(vcf$V1)
-	vcf$V2 <- as.numeric(vcf$V2)
-	vcf$V3 <- as.character(vcf$V3)
-	vcf$V4 <- as.character(vcf$V4)
-	vcf$V5 <- as.character(vcf$V5)
-	vcf$V6 <- as.character(vcf$V6)
-	vcf$V7 <- as.character(vcf$V7)
-	vcf$V8 <- as.character(vcf$V8)
-	vcf$V9 <- as.character(vcf$V9)
-	vcf$V10 <- as.character(vcf$V10)
-	vcf$V11 <- as.character(vcf$V11)
-	
-	#mutations_info <- as.character(mutations$V8)
-	
-	return(vcf)
+  vcf <- read.table(path,sep="\t")
+  vcf$V1 <- as.character(vcf$V1)
+  vcf$V2 <- as.numeric(vcf$V2)
+  vcf$V3 <- as.character(vcf$V3)
+  vcf$V4 <- as.character(vcf$V4)
+  vcf$V5 <- as.character(vcf$V5)
+  vcf$V6 <- as.character(vcf$V6)
+  vcf$V7 <- as.character(vcf$V7)
+  vcf$V8 <- as.character(vcf$V8)
+  vcf$V9 <- as.character(vcf$V9)
+  vcf$V10 <- as.character(vcf$V10)
+  vcf$V11 <- as.character(vcf$V11)
+  
+  #mutations_info <- as.character(mutations$V8)
+  
+  return(vcf)
 }
 
 Reformat_Annotated_Aggregated_VCF <- function(listcl_mutations) {
@@ -235,49 +235,49 @@ get.unfiltered.doubles <- function(mutations, point, read) {
 
 replace_low_qual_bases <- function(path, Q_threshold, n_cores) {
 
-	require(doParallel)
-	require(parallel)
-	require(foreach)
-  	require(tidyverse)
-  	require(Rsamtools)
-  	library(stringr)
+  require(doParallel)
+  require(parallel)
+  require(foreach)
+    require(tidyverse)
+    require(Rsamtools)
+    library(stringr)
 
   # Sample Values:
   #path <- path
   #Q_threshold <- 25
   #n_cores <- 29
-	
+  
   cl <- makeCluster(n_cores)
-	registerDoParallel(cl, cores = n_cores)
+  registerDoParallel(cl, cores = n_cores)
 
-	bam <- BamFile(path)
-	yieldSize(bam) <- 100
-	#ScanBamParam(tag=c("NM", "MD:Z", "MC:Z", "AS:i", "XS:i", "SA:Z", ), what="flag")
-	open(bam)
-	reads <- scanBam(bam)
+  bam <- BamFile(path)
+  yieldSize(bam) <- 100
+  #ScanBamParam(tag=c("NM", "MD:Z", "MC:Z", "AS:i", "XS:i", "SA:Z", ), what="flag")
+  open(bam)
+  reads <- scanBam(bam)
 
-	low_scores <- phred[phred$q_score < Q_threshold,]$symbol
-	vals <- paste(low_scores, collapse = '')
-	regex <- paste('[',vals,']',sep= '')
+  low_scores <- phred[phred$q_score < Q_threshold,]$symbol
+  vals <- paste(low_scores, collapse = '')
+  regex <- paste('[',vals,']',sep= '')
 
-	positions <- list()
-	clusterExport(cl = cl, c("reads","positions"), envir = environment())
+  positions <- list()
+  clusterExport(cl = cl, c("reads","positions"), envir = environment())
 
-	for (j in c(1:length(reads))) {
-	  foreach (i=1:length(reads[[j]]$seq), .packages = c('tidyverse', 'Rsamtools', 'stringr')) %dopar% {
-	  #for (i in c(1:length(reads[[j]]$seq))) {
-	  	
-	    
-	    locations <- str_locate_all(reads[[j]]$qual[[i]], regex)[[1]][,1]
-	  	print(locations)
-	  	len <- length(locations)
-	  	positions[[as.character(i)]] <- locations
-	  
-		#if (len > 0) {
-			#reads[[j]]$seq[[i]] <- replaceLetterAt(reads[[j]]$seq[[i]], locations, rep('N',len))
-		#}
-		}
-	}
+  for (j in c(1:length(reads))) {
+    foreach (i=1:length(reads[[j]]$seq), .packages = c('tidyverse', 'Rsamtools', 'stringr')) %dopar% {
+    #for (i in c(1:length(reads[[j]]$seq))) {
+      
+      
+      locations <- str_locate_all(reads[[j]]$qual[[i]], regex)[[1]][,1]
+      print(locations)
+      len <- length(locations)
+      positions[[as.character(i)]] <- locations
+    
+    #if (len > 0) {
+      #reads[[j]]$seq[[i]] <- replaceLetterAt(reads[[j]]$seq[[i]], locations, rep('N',len))
+    #}
+    }
+  }
 
 #stopCluster(cl)
 final <- list(reads, positions)

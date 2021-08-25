@@ -1,4 +1,4 @@
-
+library(tidyverse)
 #!/usr/bin/env Rscript
 # parameter arguments:
 args = commandArgs(trailingOnly=TRUE)
@@ -24,6 +24,8 @@ if (length(args)==0) {
 
 # score mutations for umi support:
 ScoredMutations <- score.mutations(Mutations, Reads, Metadata)
+RecoveredDoubles <- ScoredMutations %>% filter(recovered_double==TRUE)
 
 # Write scored mutations to drive:
 write.csv(ScoredMutations, file = file.path(out_dir, 'ScoredMutations.csv'), row.names = F)
+write.csv(RecoveredDoubles, file = file.path(out_dir, 'RecoveredDoubles.csv'), row.names = F)
