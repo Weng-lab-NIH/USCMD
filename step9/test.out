@@ -1,0 +1,93 @@
+--mutations_list /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step7/mutations_F3_2.csv // Optional to see the parameter:value result
+--mutations_Reads /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step8/F3_2_reads.tsv // Optional to see the parameter:value result
+--mutations_Metadata /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step8/F3_2_meta.tsv // Optional to see the parameter:value result
+--out_dir ./test_out // Optional to see the parameter:value result
+mutations_list: /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step7/mutations_F3_2.csv
+mutations_Reads: /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step8/F3_2_reads.tsv
+mutations_Metadata: /gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2/step8/F3_2_meta.tsv
+out_dir: ./test_out
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+✔ tibble  3.1.3     ✔ dplyr   1.0.7
+✔ tidyr   1.1.3     ✔ stringr 1.4.0
+✔ readr   2.0.0     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+New names:
+* `` -> ...1
+Rows: 52217 Columns: 44
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (28): Chr, ID, REF, ALT, QUAL, FILTER, MFRL, SAAF, SAP, ANN, VAR_TYPE, M...
+dbl (14): ...1, POS, CONTQ, DP, ECNT, GERMQ, MPOS, NALOD, NLOD, POPAF, TLOD,...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 1494483 Columns: 1
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (1): X1
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+[1] "Getting positions from unfiltered with 2 bases."
+[1] "mutations reformatted"
+[1] 52217    44
+[1] 1348386      13
+[1] "head(point.reads)"
+[1] "G" "G" "G" "G" "G" "G"
+`summarise()` has grouped output by 'bc', 'Chr', 'POS'. You can override using the `.groups` argument.
+[1] "read_number filter complete"
+[1] 52217    45
+ [1] "...1"                "Chr"                 "POS"                
+ [4] "ID"                  "REF"                 "ALT"                
+ [7] "QUAL"                "FILTER"              "CONTQ"              
+[10] "DP"                  "ECNT"                "GERMQ"              
+[13] "MBQ"                 "MFRL"                "MMQ"                
+[16] "MPOS"                "NALOD"               "NLOD"               
+[19] "POPAF"               "SAAF"                "SAP"                
+[22] "TLOD"                "ANN"                 "VAR_TYPE"           
+[25] "MOD"                 "GENE"                "ENSEMBL_GENE_ID"    
+[28] "READ_TYPE"           "ENST_ID"             "FUNCTION"           
+[31] "ratio"               "NUC_CHANGE"          "AA_CHANGE"          
+[34] "ratio1"              "ratio2"              "ratio3"             
+[37] "number"              "stat1"               "stat2"              
+[40] "stat3"               "donor"               "bc"                 
+[43] "ref_len"             "alt_len"             "reads_in_umi_filter"
+`summarise()` has grouped output by 'bc', 'Chr', 'POS', 'umi'. You can override using the `.groups` argument.
+[1] "umi_fraction filter complete."
+[1] 52217    47
+ [1] "...1"                "Chr"                 "POS"                
+ [4] "ID"                  "REF"                 "ALT"                
+ [7] "QUAL"                "FILTER"              "CONTQ"              
+[10] "DP"                  "ECNT"                "GERMQ"              
+[13] "MBQ"                 "MFRL"                "MMQ"                
+[16] "MPOS"                "NALOD"               "NLOD"               
+[19] "POPAF"               "SAAF"                "SAP"                
+[22] "TLOD"                "ANN"                 "VAR_TYPE"           
+[25] "MOD"                 "GENE"                "ENSEMBL_GENE_ID"    
+[28] "READ_TYPE"           "ENST_ID"             "FUNCTION"           
+[31] "ratio"               "NUC_CHANGE"          "AA_CHANGE"          
+[34] "ratio1"              "ratio2"              "ratio3"             
+[37] "number"              "stat1"               "stat2"              
+[40] "stat3"               "donor"               "bc"                 
+[43] "ref_len"             "alt_len"             "reads_in_umi_filter"
+[46] "ALT.sc"              "umi_fraction_filter"
+[1] "G" "A" "C" "A" "C" "A"
+[1] NA NA NA NA NA NA
+< table of extent 4 x 0 >
+`summarise()` has grouped output by 'bc', 'Chr'. You can override using the `.groups` argument.
+[1] "Unfiltered doubles recovery complete"
+[1] 0 5
+[1] "passed mutect filter"
+[1] "mutations reformatted"
+`summarise()` has grouped output by 'bc', 'Chr', 'POS'. You can override using the `.groups` argument.
+[1] "read_number filter complete"
+`summarise()` has grouped output by 'bc', 'Chr', 'POS', 'umi'. You can override using the `.groups` argument.
+[1] "umi_fraction filter complete."
+[1]  0 48
+[1] "0 second mutations recovered"
+[1] "recovered double mutations added"
+Warning message:
+One or more parsing issues, see `problems()` for details 

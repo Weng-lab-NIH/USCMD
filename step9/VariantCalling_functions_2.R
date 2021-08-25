@@ -60,6 +60,7 @@ score.mutations <- function(mutations, point, read) {
    # get filter with recovered double-base mutations. 
   double.mutations <- get.unfiltered.doubles(mutations, point, read)
   print("Unfiltered doubles recovery complete")
+  print(dim(double.mutations))
 
   require(tidyverse) 
   sam = unique(mutations$donor)
@@ -138,6 +139,7 @@ score.mutations <- function(mutations, point, read) {
       filter(is.na(is_original)) %>%
       dplyr::select(-is_original) %>%
       mutate(recovered_double=TRUE)
+    print(dim(double.mutations))
 
     mutations.filtered$recovered_double <- FALSE
     print(paste(nrow(double.mutations), "second mutations recovered"))
@@ -158,6 +160,7 @@ get.unfiltered.doubles <- function(mutations, point, read) {
   
     # Generate Running Filter Dataframe:    
     print('Getting positions from unfiltered with 2 bases.')
+    #print(dim(mutations))
    
     # For Candidates for Correction:
     # Transform Point Mutations Read Data:
@@ -176,6 +179,10 @@ get.unfiltered.doubles <- function(mutations, point, read) {
       dplyr::select(-ALT)
       
     print('mutations reformatted')
+    print(dim(mutations))
+    print(dim(point.reads))
+    print("head(point.reads)")
+    print(head(point.reads$ALT.sc))
     
     # FILTER:
     
@@ -195,6 +202,8 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     mutations <- mutations %>% left_join(joining_reads, by = c('bc','Chr','POS'))
     
     print('read_number filter complete')
+    print(dim(mutations))
+    print(colnames(mutations))
     
     # Remove point mutations with fewer than 50% of supporting reads in a UMI:
     # (These are likely errors)
@@ -213,6 +222,11 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     mutations <- mutations %>% left_join(joining.umi.fraction.filter, by = c('bc','Chr','POS'))
     
     print('umi_fraction filter complete.')
+    print(dim(mutations))
+    print(colnames(mutations))
+    print(head(mutations$REF))
+    print(head(mutations$ALT.sc))
+    print(table(mutations$REF, mutations$ALT.sc))
     
     ## only keep positions with 2 bases present. Added by Jeffrey Cifello.
     count.bases.filter <- distinct(mutations, bc, Chr, POS, REF, ALT.sc) %>%

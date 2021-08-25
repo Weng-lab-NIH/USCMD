@@ -1,8 +1,13 @@
 #!/bin/bash
+
+indir="/gpfs/gsfs5/users/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/real_data/F3_2"
+donor_id="F3_2"
+
 mkdir -p test_out
 ./step9.bash \
-  --mutations_list /data/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/stitched_testing_hh_2021_08_05/step7_out/mutations_out_BL5481.csv \
-  --mutations_Reads /data/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/stitched_testing_hh_2021_08_05/step8_out/out_BL5481_reads.tsv \
-  --mutations_Metadata /data/TCR/10X_Genomics/scRNAseq_P1_HUMAN_GEX_V2/code/test_code/pipeline/stitched_testing_hh_2021_08_05/step8_out/out_BL5481_meta.tsv \
-  --out_dir ./test_out
+  --mutations_list ${indir}/step7/mutations_${donor_id}.csv \
+  --mutations_Reads ${indir}/step8/${donor_id}_reads.tsv \
+  --mutations_Metadata ${indir}/step8/${donor_id}_meta.tsv \
+  --out_dir ./test_out \
+  --SNPs_vcf /data/TCR/10X_Genomics/scRNAseq_P4_HUMAN_GEX/data/interim/mutations/allele_specific/SNPS/F3_SM_bwa_RawSNPs_FLTR_PASS_single.vcf
   
