@@ -11,6 +11,7 @@
 echo compare_double_variant
 input_csv=$1
 vcf_file=$2
+outdir=$3
 
 chr_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 2 | sed 's/"//g'))
 pos_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 3 | sed 's/"//g'))
@@ -38,8 +39,8 @@ done
 
 echo ${found_lines[@]}
 
-echo chr,POS,REF,ALT > ./test_output.csv
+echo chr,POS,REF,ALT > ${outdir}/SNP_at_double_variant_loc.csv
 
 for i in ${found_lines[@]}; do 
-	echo $i >> ./test_output.csv
+	echo $i >> ${outdir}/SNP_at_double_variant_loc.csv
 done
