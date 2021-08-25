@@ -42,8 +42,8 @@ for (i in 1:length(sample_cells)) {
       print(paste("couldn't read ", filename, "skipping to next."))
       return("error")
     })
-  if(one_cell=="error"){
-    print('here')
+  print(class(one_cell))
+  if(class(one_cell)=="character"){
     next
   }
   one_cell$V1 <- as.character(one_cell$V1)

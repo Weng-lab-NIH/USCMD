@@ -3,6 +3,7 @@
 mutations_list=${mutations_list:default_mutations_list}
 mutations_Reads=${mutations_Reads:default_mutations_Reads}
 mutations_Metadata=${mutations_Metadata:default_mutations_Metadata}
+SNPs_vcf=${SNPs_vcf:default_SNPs_vcf}
 out_dir=${out_dir:default_out_dir}
 
 while [ $# -gt 0 ]; do            
@@ -22,4 +23,4 @@ echo out_dir: ${out_dir}
 # GENERATE MUTATION SCORES:
 
 Rscript ./step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${out_dir}
-Rscript ./get_double_variant_positions.R ${out_dir}/ScoredMutations.csv ${out_dir}/double_variant_positions.R
+bash ./compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv $SNPs_vcf ${out_dir}
