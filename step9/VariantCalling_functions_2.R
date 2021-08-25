@@ -1,24 +1,24 @@
 
 Parse_VCF_File <- function(path) {
 
-	require(tidyverse)
+  require(tidyverse)
 
-	vcf <- read.table(path,sep="\t")
-	vcf$V1 <- as.character(vcf$V1)
-	vcf$V2 <- as.numeric(vcf$V2)
-	vcf$V3 <- as.character(vcf$V3)
-	vcf$V4 <- as.character(vcf$V4)
-	vcf$V5 <- as.character(vcf$V5)
-	vcf$V6 <- as.character(vcf$V6)
-	vcf$V7 <- as.character(vcf$V7)
-	vcf$V8 <- as.character(vcf$V8)
-	vcf$V9 <- as.character(vcf$V9)
-	vcf$V10 <- as.character(vcf$V10)
-	vcf$V11 <- as.character(vcf$V11)
-	
-	#mutations_info <- as.character(mutations$V8)
-	
-	return(vcf)
+  vcf <- read.table(path,sep="\t")
+  vcf$V1 <- as.character(vcf$V1)
+  vcf$V2 <- as.numeric(vcf$V2)
+  vcf$V3 <- as.character(vcf$V3)
+  vcf$V4 <- as.character(vcf$V4)
+  vcf$V5 <- as.character(vcf$V5)
+  vcf$V6 <- as.character(vcf$V6)
+  vcf$V7 <- as.character(vcf$V7)
+  vcf$V8 <- as.character(vcf$V8)
+  vcf$V9 <- as.character(vcf$V9)
+  vcf$V10 <- as.character(vcf$V10)
+  vcf$V11 <- as.character(vcf$V11)
+  
+  #mutations_info <- as.character(mutations$V8)
+  
+  return(vcf)
 }
 
 Reformat_Annotated_Aggregated_VCF <- function(listcl_mutations) {
@@ -60,7 +60,6 @@ score.mutations <- function(mutations, point, read) {
    # get filter with recovered double-base mutations. 
   double.mutations <- get.unfiltered.doubles(mutations, point, read)
   print("Unfiltered doubles recovery complete")
-  print(dim(double.mutations))
 
   require(tidyverse) 
   sam = unique(mutations$donor)
@@ -117,7 +116,7 @@ score.mutations <- function(mutations, point, read) {
     # Remove point mutations with fewer than 50% of supporting reads in a UMI:
     # (These are likely errors)
     read.umi.fraction.filter <- filter.reads.in.umi %>% 
-      ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads, by = c('bc','umi')) %>%
+      ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads.filter, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT) %>%
       summarise(num = n(), verbose = F) %>%
       group_by(bc,Chr,POS,umi) %>%
@@ -132,14 +131,13 @@ score.mutations <- function(mutations, point, read) {
     
     print('umi_fraction filter complete.')
     
-    ## get recovered double mutations, and add these. 
+    ## get recovered double mutations, and add these. Remove found variants already detected by mutect. 
     double.mutations <- mutate(double.mutations, ALT=ALT.sc) %>% 
       dplyr::select(-ALT.sc) %>%
       left_join(mutate(mutations.filtered, is_original=TRUE), by=c("bc", "Chr", "POS", "ALT", "REF")) %>% # add column to indicate which mutations are recovered
       filter(is.na(is_original)) %>%
       dplyr::select(-is_original) %>%
       mutate(recovered_double=TRUE)
-    print(dim(double.mutations))
 
     mutations.filtered$recovered_double <- FALSE
     print(paste(nrow(double.mutations), "second mutations recovered"))
@@ -152,7 +150,7 @@ score.mutations <- function(mutations, point, read) {
 
 
 get.unfiltered.doubles <- function(mutations, point, read) {
-  mutations <- mutate(mutations, bc=paste0(bc, "-1"))
+  #mutations <- mutate(mutations, bc=paste0(bc, "-1"))
   ## the same UMI correction, but do not enforce mutect filtering requirements. (tlod, dp, ecnt)
   ## Only save the positions with exactly 2 bases present. These will be returned. 
   require(tidyverse) 
@@ -160,7 +158,6 @@ get.unfiltered.doubles <- function(mutations, point, read) {
   
     # Generate Running Filter Dataframe:    
     print('Getting positions from unfiltered with 2 bases.')
-    #print(dim(mutations))
    
     # For Candidates for Correction:
     # Transform Point Mutations Read Data:
@@ -179,10 +176,6 @@ get.unfiltered.doubles <- function(mutations, point, read) {
       dplyr::select(-ALT)
       
     print('mutations reformatted')
-    print(dim(mutations))
-    print(dim(point.reads))
-    print("head(point.reads)")
-    print(head(point.reads$ALT.sc))
     
     # FILTER:
     
@@ -202,8 +195,6 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     mutations <- mutations %>% left_join(joining_reads, by = c('bc','Chr','POS'))
     
     print('read_number filter complete')
-    print(dim(mutations))
-    print(colnames(mutations))
     
     # Remove point mutations with fewer than 50% of supporting reads in a UMI:
     # (These are likely errors)
@@ -222,11 +213,6 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     mutations <- mutations %>% left_join(joining.umi.fraction.filter, by = c('bc','Chr','POS'))
     
     print('umi_fraction filter complete.')
-    print(dim(mutations))
-    print(colnames(mutations))
-    print(head(mutations$REF))
-    print(head(mutations$ALT.sc))
-    print(table(mutations$REF, mutations$ALT.sc))
     
     ## only keep positions with 2 bases present. Added by Jeffrey Cifello.
     count.bases.filter <- distinct(mutations, bc, Chr, POS, REF, ALT.sc) %>%
@@ -241,57 +227,57 @@ get.unfiltered.doubles <- function(mutations, point, read) {
       distinct(bc, Chr, POS, has.two.filter)
 
     mutations <- inner_join(mutations, joining.count.filter, by=c("bc", "Chr", "POS")) %>%
-      distinct(bc, Chr, POS, REF, ALT.sc) # get the specific mutations that are doubled up
-
+      distinct(bc, Chr, POS, REF, ALT.sc) %>% # get the specific mutations that are doubled up
+      filter(ALT.sc!=REF)
     return(mutations)
   }
 
 
 replace_low_qual_bases <- function(path, Q_threshold, n_cores) {
 
-	require(doParallel)
-	require(parallel)
-	require(foreach)
-  	require(tidyverse)
-  	require(Rsamtools)
-  	library(stringr)
+  require(doParallel)
+  require(parallel)
+  require(foreach)
+    require(tidyverse)
+    require(Rsamtools)
+    library(stringr)
 
   # Sample Values:
   #path <- path
   #Q_threshold <- 25
   #n_cores <- 29
-	
+  
   cl <- makeCluster(n_cores)
-	registerDoParallel(cl, cores = n_cores)
+  registerDoParallel(cl, cores = n_cores)
 
-	bam <- BamFile(path)
-	yieldSize(bam) <- 100
-	#ScanBamParam(tag=c("NM", "MD:Z", "MC:Z", "AS:i", "XS:i", "SA:Z", ), what="flag")
-	open(bam)
-	reads <- scanBam(bam)
+  bam <- BamFile(path)
+  yieldSize(bam) <- 100
+  #ScanBamParam(tag=c("NM", "MD:Z", "MC:Z", "AS:i", "XS:i", "SA:Z", ), what="flag")
+  open(bam)
+  reads <- scanBam(bam)
 
-	low_scores <- phred[phred$q_score < Q_threshold,]$symbol
-	vals <- paste(low_scores, collapse = '')
-	regex <- paste('[',vals,']',sep= '')
+  low_scores <- phred[phred$q_score < Q_threshold,]$symbol
+  vals <- paste(low_scores, collapse = '')
+  regex <- paste('[',vals,']',sep= '')
 
-	positions <- list()
-	clusterExport(cl = cl, c("reads","positions"), envir = environment())
+  positions <- list()
+  clusterExport(cl = cl, c("reads","positions"), envir = environment())
 
-	for (j in c(1:length(reads))) {
-	  foreach (i=1:length(reads[[j]]$seq), .packages = c('tidyverse', 'Rsamtools', 'stringr')) %dopar% {
-	  #for (i in c(1:length(reads[[j]]$seq))) {
-	  	
-	    
-	    locations <- str_locate_all(reads[[j]]$qual[[i]], regex)[[1]][,1]
-	  	print(locations)
-	  	len <- length(locations)
-	  	positions[[as.character(i)]] <- locations
-	  
-		#if (len > 0) {
-			#reads[[j]]$seq[[i]] <- replaceLetterAt(reads[[j]]$seq[[i]], locations, rep('N',len))
-		#}
-		}
-	}
+  for (j in c(1:length(reads))) {
+    foreach (i=1:length(reads[[j]]$seq), .packages = c('tidyverse', 'Rsamtools', 'stringr')) %dopar% {
+    #for (i in c(1:length(reads[[j]]$seq))) {
+      
+      
+      locations <- str_locate_all(reads[[j]]$qual[[i]], regex)[[1]][,1]
+      print(locations)
+      len <- length(locations)
+      positions[[as.character(i)]] <- locations
+    
+    #if (len > 0) {
+      #reads[[j]]$seq[[i]] <- replaceLetterAt(reads[[j]]$seq[[i]], locations, rep('N',len))
+    #}
+    }
+  }
 
 #stopCluster(cl)
 final <- list(reads, positions)
