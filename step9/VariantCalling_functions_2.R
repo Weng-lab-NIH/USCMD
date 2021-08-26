@@ -55,7 +55,8 @@ Reformat_Annotated_Aggregated_VCF <- function(listcl_mutations) {
   # 
 }
 
-score.mutations <- function(mutations, point, read) {
+score.mutations <- function(mutations, point, read,
+  sc_AD_filter, sc_DP_filter, exome_DP_filter) {
   mutations <- mutate(mutations, bc=paste0(bc, "-1"))
 
   # get filter with recovered double-base mutations. 
@@ -73,7 +74,8 @@ score.mutations <- function(mutations, point, read) {
     filter.mutect <- mutations %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 2, 'pass', 'fail')) %>%
-      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & AD > 1, 'pass', 'fail')) %>%
+      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > exome_DP_filter & sc_AD > sc_AD_filter & sc_DP > sc_DP_filter, 
+        'pass', 'fail')) %>%
       filter(mutect_filter == 'pass') %>%
       dplyr::select(bc,Chr,POS,ALT,mutect_filter)
     mutations.filtered <- mutations.filtered %>% left_join(filter.mutect, by = c('bc','Chr','POS','ALT'))
@@ -89,7 +91,7 @@ score.mutations <- function(mutations, point, read) {
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)
-  
+
     point.reads <- point %>%
       inner_join(read, by = 'read') %>%
       mutate(donor = sam)

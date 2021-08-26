@@ -12,7 +12,10 @@ source('./VariantCalling_functions_2.R')
 Mutations <- read_csv(args[1])
 Reads <- read_tsv(args[2], col_types = "ccdccccdcc", col_names = FALSE)
 Metadata <- read_tsv(args[3], col_names = FALSE)
-out_dir <- args[4]
+sc_AD_filter <- as.numeric(args[4])
+sc_DP_filter <- as.numeric(args[5])
+exome_DP_filter <- as.numeric(args[6])
+out_dir <- args[7]
 
 # test if there is at least one argument: if not, return an error; 
 # check if the arguments are of the proper type
@@ -23,7 +26,7 @@ if (length(args)==0) {
 }
 
 # score mutations for umi support:
-ScoredMutations <- score.mutations(Mutations, Reads, Metadata)
+ScoredMutations <- score.mutations(Mutations, Reads, Metadata, sc_AD_filter, sc_DP_filter, exome_DP_filter)
 RecoveredDoubles <- ScoredMutations %>% filter(recovered_double==TRUE)
 
 # Write scored mutations to drive:
