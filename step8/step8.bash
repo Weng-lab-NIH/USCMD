@@ -15,7 +15,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-mkdir ${out_dir}/TL
+mkdir -p ${out_dir}/TL
 
 echo sample: ${sample}
 echo scBAM_dir: ${scBAM_dir}
