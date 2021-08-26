@@ -61,7 +61,7 @@ score.mutations <- function(mutations, point, read) {
   # get specific single cell stats from the stat1 and stat2 columns
   # stat1 will contain our new column names names, and stat2 the values
   # added by Humza Hemani
-  testy_westy <- apply(mutations, 1, map_stat1_stat2_cols)
+  testy_westy <- apply(mutations, 1, get_sc_stats)
   print(testy_westy)
   assert(1==0)
 
