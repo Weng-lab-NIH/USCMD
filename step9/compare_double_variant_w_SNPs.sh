@@ -13,6 +13,8 @@ input_csv=$1
 vcf_file=$2
 outdir=$3
 
+echo "outdir=${outdir}"
+
 chr_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 2 | sed 's/"//g'))
 pos_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 3 | sed 's/"//g'))
 

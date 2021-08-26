@@ -9,7 +9,7 @@ mkdir -p test_out
   --mutations_Reads ../step8/test_out/${donor_id}_reads.tsv \
   --mutations_Metadata ../step8/test_out/${donor_id}_meta.tsv \
   --out_dir ./test_out \
-  --SNPs_vcf /data/TCR/10X_Genomics/scRNAseq_P4_HUMAN_GEX/data/interim/mutations/allele_specific/SNPS/F3_SM_bwa_RawSNPs_FLTR_PASS_single.vcf\
+  --SNPs_vcf /data/TCR/10X_Genomics/scRNAseq_P4_HUMAN_GEX/data/interim/mutations/allele_specific/SNPS/${donor_id}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf\
   --sc_AD_filter 2 \
   --sc_DP_filter 3 \
   --exome_DP_filter 10 
