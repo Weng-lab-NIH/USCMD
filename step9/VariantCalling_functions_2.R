@@ -55,15 +55,9 @@ Reformat_Annotated_Aggregated_VCF <- function(listcl_mutations) {
   # 
 }
 
-score.mutations <- function(mutations, point, read) {
+score.mutations <- function(mutations, point, read,
+  sc_AD_filter, sc_DP_filter, exome_DP_filter) {
   mutations <- mutate(mutations, bc=paste0(bc, "-1"))
-
-  # get specific single cell stats from the stat1 and stat2 columns
-  # stat1 will contain our new column names names, and stat2 the values
-  # added by Humza Hemani
-  testy_westy <- apply(mutations, 1, map_stat1_stat2_cols)
-  print(testy_westy)
-  assert(1==0)
 
   # get filter with recovered double-base mutations. 
   double.mutations <- get.unfiltered.doubles(mutations, point, read)
@@ -80,7 +74,8 @@ score.mutations <- function(mutations, point, read) {
     filter.mutect <- mutations %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 2, 'pass', 'fail')) %>%
-      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & AD > 1, 'pass', 'fail')) %>%
+      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > exome_DP_filter & sc_AD > sc_AD_filter & sc_DP > sc_DP_filter, 
+        'pass', 'fail')) %>%
       filter(mutect_filter == 'pass') %>%
       dplyr::select(bc,Chr,POS,ALT,mutect_filter)
     mutations.filtered <- mutations.filtered %>% left_join(filter.mutect, by = c('bc','Chr','POS','ALT'))
@@ -96,7 +91,7 @@ score.mutations <- function(mutations, point, read) {
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)
-  
+
     point.reads <- point %>%
       inner_join(read, by = 'read') %>%
       mutate(donor = sam)
@@ -156,19 +151,6 @@ score.mutations <- function(mutations, point, read) {
 
     return(mutations.filtered)
   }
-
-get_sc_stats <- function(mutations_row){
-  # take in the stat1 labels and map them to the stat2 values
-  # return them as a data.frame with 1 row
-  # added by Humza Hemani
-  print("INSIDE THE MAPPING FUNCTION")
-  sc_stat_names <- str_split(mutations_row[['stat1']], ":")
-  sc_stats <- str_split(mutations_row[['stat2']], ":")
-  names(sc_stats) <- sc_stat_names
-  print(sc_stats)
-  assert(1==0)
-  return(sc_stats)
-}
 
 get.unfiltered.doubles <- function(mutations, point, read) {
   #mutations <- mutate(mutations, bc=paste0(bc, "-1"))
