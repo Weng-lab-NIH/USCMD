@@ -57,7 +57,15 @@ Reformat_Annotated_Aggregated_VCF <- function(listcl_mutations) {
 
 score.mutations <- function(mutations, point, read) {
   mutations <- mutate(mutations, bc=paste0(bc, "-1"))
-   # get filter with recovered double-base mutations. 
+
+  # get specific single cell stats from the stat1 and stat2 columns
+  # stat1 will contain our new column names names, and stat2 the values
+  # added by Humza Hemani
+  testy_westy <- apply(mutations, 1, map_stat1_stat2_cols)
+  print(testy_westy)
+  assert(1==0)
+
+  # get filter with recovered double-base mutations. 
   double.mutations <- get.unfiltered.doubles(mutations, point, read)
   print("Unfiltered doubles recovery complete")
 
@@ -149,6 +157,18 @@ score.mutations <- function(mutations, point, read) {
     return(mutations.filtered)
   }
 
+get_sc_stats <- function(mutations_row){
+  # take in the stat1 labels and map them to the stat2 values
+  # return them as a data.frame with 1 row
+  # added by Humza Hemani
+  print("INSIDE THE MAPPING FUNCTION")
+  sc_stat_names <- str_split(mutations_row[['stat1']], ":")
+  sc_stats <- str_split(mutations_row[['stat2']], ":")
+  names(sc_stats) <- sc_stat_names
+  print(sc_stats)
+  assert(1==0)
+  return(sc_stats)
+}
 
 get.unfiltered.doubles <- function(mutations, point, read) {
   #mutations <- mutate(mutations, bc=paste0(bc, "-1"))
