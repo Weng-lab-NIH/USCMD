@@ -32,7 +32,7 @@ extract_meta () {
 
 # GENERATE METADATA:
 
-Rscript /UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
+Rscript ./UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
 
 # EXTRACT METADATA FOR CELL MUTATIONS:
 # assume that step2 already indexes the scBAMs
@@ -41,7 +41,7 @@ Rscript /UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
 
 cat ${out_dir}/TL/UnfilteredMutations \
 | parallel --jobs=${num_cores} --max-args=4 samtools view -b -S -h ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
-'|' java -jar /jvarkit/dist/sam2tsv.jar \
+'|' java -jar $JVARKIT_JARPATH/sam2tsv.jar \
 '|' grep -e {4} \
 '>>' ${out_dir}/${sample}_reads.tsv
 
