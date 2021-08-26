@@ -5,6 +5,9 @@ mutations_Reads=${mutations_Reads:default_mutations_Reads}
 mutations_Metadata=${mutations_Metadata:default_mutations_Metadata}
 SNPs_vcf=${SNPs_vcf:default_SNPs_vcf}
 out_dir=${out_dir:default_out_dir}
+sc_AD_filter=${sc_AD_filter:default_sc_AD_filter}
+sc_DP_filter=${sc_DP_filter:default_sc_DP_filter}
+exome_DP_filter=${exome_DP_filter:default_exome_DP_filter}
 
 while [ $# -gt 0 ]; do            
     if [[ $1 == *"--"* ]]; then
