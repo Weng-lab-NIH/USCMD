@@ -3,8 +3,8 @@
 version <- '4.9.0'
 
 # Load Libraries:
-library(tidyverse)
-library(argparse)
+library("tidyverse")
+library("argparse")
 
 parser <- ArgumentParser()
 parser$add_argument("sample", help="The name of your sample.")
