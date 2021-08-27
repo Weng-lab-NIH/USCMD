@@ -42,6 +42,10 @@ sam <- args$sample
 annotate_out <- args$annotate_out
 aggregate_out <- args$aggregate_out
 
+print(paste("sam", sam))
+print(paste("annotate_out", annotate_out))
+print(paste("aggregate_out", aggregate_out))
+
 # Set directories:
 if (dir.exists(aggregate_out)==FALSE) { dir.create(aggregate_out) }
 
