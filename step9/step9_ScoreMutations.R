@@ -6,7 +6,6 @@ args = commandArgs(trailingOnly=TRUE)
 # SCORE MUTATIONS
 version <- 'step9.0'
 library(tidyverse)
-source('./VariantCalling_functions_2.R')
 
 # Arguments: Mutations List: tibble, Point Mutation Reads: tibble, Read Metadata: tibble
 Mutations <- read_csv(args[1])
@@ -16,6 +15,9 @@ sc_AD_filter <- as.numeric(args[4])
 sc_DP_filter <- as.numeric(args[5])
 exome_DP_filter <- as.numeric(args[6])
 out_dir <- args[7]
+variant_calling_functions <- as.character(args[8])
+
+source(variant_calling_functions)
 
 # test if there is at least one argument: if not, return an error; 
 # check if the arguments are of the proper type

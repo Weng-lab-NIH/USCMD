@@ -41,10 +41,13 @@ rm -f ${out}/reads.csv
 echo precat
 cat ${barcode_list} | parallel --jobs $num_cores bamtools filter -in ${bigbam} -out ${out}/${sample}/${sample}_{}.bam -tag ${tname}:{}
 echo cat1 done
+cat ${barcode_list} | parallel samtools view ${out}/${sample}/${sample}_{}.bam | wc -l
 cat ${barcode_list} | parallel --jobs $num_cores samtools sort ${out}/${sample}/${sample}_{}.bam
 echo cat2 done
+cat ${barcode_list} | parallel samtools view ${out}/${sample}/${sample}_{}.bam | wc -l
 cat ${barcode_list} | parallel --jobs $num_cores samtools index ${out}/${sample}/${sample}_{}.bam
 echo cat3 done
+cat ${barcode_list} | parallel samtools view ${out}/${sample}/${sample}_{}.bam | wc -l
 LEN=$(wc -w < ${barcode_list})
 
 for i in $( seq 1 ${LEN} ); do

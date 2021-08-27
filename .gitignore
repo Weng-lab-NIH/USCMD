@@ -2,3 +2,5 @@
 **/*.sif
 **/*.csv
 **/*.out
+**/test*
+test*

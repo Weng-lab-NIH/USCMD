@@ -25,5 +25,5 @@ echo out_dir: ${out_dir}
 
 # GENERATE MUTATION SCORES:
 
-Rscript /step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${out_dir}
-bash /compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv $SNPs_vcf ${out_dir}
+Rscript `dirname "$0"`/step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} 2 3 10 ${out_dir} `dirname "$0"`/VariantCalling_functions_2.R
+bash `dirname "$0"`/compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv $SNPs_vcf ${out_dir}

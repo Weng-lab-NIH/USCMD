@@ -24,7 +24,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-filter_snp_script=/filter_SNPS.R
+filter_snp_script="`dirname "$0"`/filter_SNPS.R"
 
 gatk --java-options "-Xmx1G" VariantFiltration \
     -R ${ref_file}  \

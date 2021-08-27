@@ -32,7 +32,7 @@ extract_meta () {
 
 # GENERATE METADATA:
 
-Rscript ./UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
+Rscript `dirname "$0"`/UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
 
 # EXTRACT METADATA FOR CELL MUTATIONS:
 # assume that step2 already indexes the scBAMs

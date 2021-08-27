@@ -18,7 +18,7 @@ while [ $# -gt 0 ]; do
 done
 
 
-Rscript /step6.R $sample \
+Rscript `dirname "$0"`/step6.R $sample \
 $scSNPs \
 $ref_10x \
 $funcotator_dir \

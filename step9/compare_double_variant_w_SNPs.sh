@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#SBATCH --partition quick
-#SBATCH --time 05:00:00
-#SBATCH --job-name check_snp
-#SBATCH --mem 4g
-#SBATCH --output cross_unfiltered_snp_doublets
-
 ## go through the positions saved to have 2 bases in scBAM. 
 ## check SNP consensus files to see if these positions can be found. 
 echo compare_double_variant
@@ -13,7 +7,7 @@ input_csv=$1
 vcf_file=$2
 outdir=$3
 
-echo "outdir=${outdir}"
+echo "outdir=${outdir} input_csv=${input_csv} vcf_file=${vcf_file}"
 
 chr_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 2 | sed 's/"//g'))
 pos_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 3 | sed 's/"//g'))
