@@ -38,6 +38,9 @@ Rscript `dirname "$0"`/UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
 # assume that step2 already indexes the scBAMs
 #cat ${out_dir}/TL/UnfilteredMutations \
 #| parallel --jobs=${num_cores} --max-args=4 samtools index ${scBAM_dir}/${sample}_{3}-1.bam
+echo "parallel --number-of-cores"
+parallel --number-of-cores
+
 rm -f ${out_dir}/${sample}_reads.tsv
 cat ${out_dir}/TL/UnfilteredMutations \
 | parallel --jobs=${num_cores} --max-args=4 samtools view -b -S -h ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
