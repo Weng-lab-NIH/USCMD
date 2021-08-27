@@ -27,7 +27,6 @@ parse_single_cell_metrics <- function(listcl_row){
     } 
     new_df[row_num, 'sc_GT']  <- str_split(listcl_row['sc_GT'], '/')[[1]][row_num+1]
     new_df[row_num, 'sc_AF']  <- str_split(listcl_row['sc_AF'], ',')[[1]][row_num]
-    new_df[row_num, 'FILTER'] <- 'PASS'
   }
   return(new_df)
 }
@@ -119,8 +118,7 @@ print(listcl)
 # PUT EACH ALLELE OF A MULTIALLELIC SNV ON ITS OWN LINE
 listcl_parsed <- apply(listcl, 1, parse_single_cell_metrics) %>% 
   bind_rows()
-listcl_parsed <- listcl_parsed %>% 
-  filter(FILTER == 'PASS')
+listcl_parsed <- listcl_parsed 
 post_multiallelic_fix_num <- nrow(listcl_parsed)
 
 print(listcl_parsed)
