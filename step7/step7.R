@@ -109,7 +109,7 @@ listcl <- listcl %>% mutate(REF = as.character(REF), ALT = as.character(ALT),
 pre_filter_num_mut <- nrow(listcl)
 listcl <- listcl %>% mutate(ref_len = nchar(REF), alt_len = nchar(ALT)) %>% 
   filter(ref_len==1 & (
-    (alt_len == 1 & FILTER=='PASS') | (str_detect(ALT, "[ATCG],[ATCG]") & FILTER =='multiallelic')
+    (alt_len == 1 ) | (str_detect(ALT, "[ATCG],[ATCG]") )
     )
   )
 post_filter_num_mut <- nrow(listcl)
