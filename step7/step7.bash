@@ -15,4 +15,4 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-Rscript /step7.R $sample $snp_anns $out_dir
+Rscript `dirname "$0"`/step7.R $sample $snp_anns $out_dir

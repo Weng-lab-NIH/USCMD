@@ -18,7 +18,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-Rscript /step5.R \
+Rscript `dirname "$0"`/step5.R \
 $sample \
 $aligned_dir \
 $scBAMs \
