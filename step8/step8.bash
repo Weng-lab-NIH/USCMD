@@ -38,20 +38,20 @@ Rscript `dirname "$0"`/UMI_CORRECTION_4.12.0.R ${mutations_csv} ${out_dir}/TL
 # assume that step2 already indexes the scBAMs
 #cat ${out_dir}/TL/UnfilteredMutations \
 #| parallel --jobs=${num_cores} --max-args=4 samtools index ${scBAM_dir}/${sample}_{3}-1.bam
-echo "parallel --number-of-cores"
-parallel --number-of-cores
+
+adjusted_num_core_tmp=$((num_cores / 4)) # divide number of cores by 4 because each process in parallel uses multiple cores
+adjusted_num_core=$((adjusted_num_core_tmp > 1 ? adjusted_num_core_tmp : 1)) # make sure we're using at least one core.
+echo adjusted_num_core $adjusted_num_core
 
 rm -f ${out_dir}/${sample}_reads.tsv
 cat ${out_dir}/TL/UnfilteredMutations \
-| parallel --jobs=${num_cores} --max-args=4 samtools view -b -S -h ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
+| parallel --jobs=${adjusted_num_core} --max-args=4 samtools view -b -S -h ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
 '|' java -jar $JVARKIT_JARPATH/sam2tsv.jar \
 '|' grep -e {4} \
 '>>' ${out_dir}/${sample}_reads.tsv
 
 rm -f ${out_dir}/${sample}_meta.tsv
 cat ${out_dir}/TL/UnfilteredMutations \
-| parallel --jobs=${num_cores} --max-args=4 samtools view ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
+| parallel --jobs=${adjusted_num_core} --max-args=4 samtools view ${scBAM_dir}/${sample}_{3}-1.bam {1}:{2}-{2} \
 | extract_meta \
 >> ${out_dir}/${sample}_meta.tsv
-
-ls -l

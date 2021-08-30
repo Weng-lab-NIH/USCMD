@@ -216,7 +216,6 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     mutations <- mutations %>% left_join(joining.umi.fraction.filter, by = c('bc','Chr','POS'))
     
     print('umi_fraction filter complete.')
-    
     ## only keep positions with 2 bases present. Added by Jeffrey Cifello.
     count.bases.filter <- distinct(mutations, bc, Chr, POS, REF, ALT.sc) %>%
       filter((is.na(ALT.sc)==F) & (REF!=ALT.sc)) %>% # don't count when the REF is found
@@ -231,7 +230,7 @@ get.unfiltered.doubles <- function(mutations, point, read) {
 
     mutations <- inner_join(mutations, joining.count.filter, by=c("bc", "Chr", "POS")) %>%
       distinct(bc, Chr, POS, REF, ALT.sc) %>% # get the specific mutations that are doubled up
-      filter(ALT.sc!=REF)
+      filter(ALT.sc!=REF)    
     return(mutations)
   }
 
