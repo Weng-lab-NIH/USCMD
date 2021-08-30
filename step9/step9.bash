@@ -3,11 +3,12 @@
 mutations_list=${mutations_list:default_mutations_list}
 mutations_Reads=${mutations_Reads:default_mutations_Reads}
 mutations_Metadata=${mutations_Metadata:default_mutations_Metadata}
-SNPs_vcf=${SNPs_vcf:default_SNPs_vcf}
+SNPs_vcf_gz=${SNPs_vcf_gz:default_SNPs_vcf_gz}
 out_dir=${out_dir:default_out_dir}
 sc_AD_filter=${sc_AD_filter:default_sc_AD_filter}
 sc_DP_filter=${sc_DP_filter:default_sc_DP_filter}
 exome_DP_filter=${exome_DP_filter:default_exome_DP_filter}
+sample=${sample:default_sample}
 
 while [ $# -gt 0 ]; do            
     if [[ $1 == *"--"* ]]; then
@@ -23,7 +24,9 @@ echo mutations_Reads: ${mutations_Reads}
 echo mutations_Metadata: ${mutations_Metadata}
 echo out_dir: ${out_dir}
 
+mkdir -p .tmp_${sample}
 # GENERATE MUTATION SCORES:
-
-Rscript `dirname "$0"`/step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} 2 3 10 ${out_dir} `dirname "$0"`/VariantCalling_functions_2.R
-bash `dirname "$0"`/compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv $SNPs_vcf ${out_dir}
+zcat ${SNPs_vcf_gz} > .tmp_${sample}/interim.vcf
+Rscript `dirname "$0"`/step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter} ${out_dir} `dirname "$0"`/VariantCalling_functions_2.R
+bash `dirname "$0"`/compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv .tmp_${sample}/interim.vcf ${out_dir}
+rm -r .tmp_${sample}

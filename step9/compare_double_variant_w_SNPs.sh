@@ -9,8 +9,8 @@ outdir=$3
 
 echo "outdir=${outdir} input_csv=${input_csv} vcf_file=${vcf_file}"
 
-chr_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 2 | sed 's/"//g'))
-pos_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 3 | sed 's/"//g'))
+chr_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 1 | sed 's/"//g'))
+pos_list=($(cat ${input_csv} | cut -d ',' -f 1,2,3 | uniq | cut -d ',' -f 2 | sed 's/"//g'))
 
 all_vals=$(echo ${#chr_list[@]}-1 | bc)
 
@@ -22,7 +22,7 @@ for rr in $(seq 1 $all_vals); do
 	pos=${pos_list[$rr]}
 	chr=${chr_list[$rr]}
 
-	echo $chr $pos
+	echo looking at $chr $pos
 	grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file
 	if [ $? -eq 0 ]; then
 		let found=found+1
@@ -33,6 +33,7 @@ for rr in $(seq 1 $all_vals); do
 	fi
 done
 
+echo '${found_lines[@]}'
 echo ${found_lines[@]}
 
 echo chr,POS,REF,ALT > ${outdir}/SNP_at_double_variant_loc.csv
