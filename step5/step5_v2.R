@@ -112,6 +112,7 @@ cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 
 cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 | parallel --jobs ',num_cores,' gatk --java-options "\'-Xmx4g -XX:+UseConcMarkSweepGC\'" FilterMutectCalls \\
+-R ${REF_VAR}/${SAMPLE}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa \\
 -V .tmp/${SAMPLE}_{}_var.vcf \\
 -O ${DIR_O}/${SAMPLE}_{}_var_FLTR.vcf \\
 --disable-tool-default-read-filters \\
