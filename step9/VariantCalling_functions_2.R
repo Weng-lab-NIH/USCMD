@@ -70,6 +70,13 @@ score.mutations <- function(mutations, point, read,
     
     mutations.filtered <- mutations
     
+    print("mutations")
+    print(head(mutations$DP))
+    print(exome_DP_filter)
+    print(head(mutations$sc_AD))
+    print(sc_AD_filter)
+    print(head(mutations$sc_DP))
+    print(sc_DP_filter)
     # Filter mutations for candidates for correction:
     filter.mutect <- mutations %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
@@ -97,6 +104,8 @@ score.mutations <- function(mutations, point, read,
       mutate(donor = sam)
       
     print('mutations reformatted')
+    # print("mutations.filtered$mutect_filter")
+    # print(mutations.filtered$mutect_filter)
     
     # FILTER:
     
@@ -123,7 +132,8 @@ score.mutations <- function(mutations, point, read,
       ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads.filter, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT) %>%
       summarise(num = n(), verbose = F) %>%
-      group_by(bc,Chr,POS,umi) %>%
+      group_by(bc,Chr,POS,umi) 
+    read.umi.fraction.filter <- read.umi.fraction.filter %>%
       mutate(umi_fraction = num / sum(num)) %>% # Fraction of each base in UMI
       mutate(umi_fraction_filter = ifelse(umi_fraction > 0.5, 'pass', 'fail')) %>% # Keep bases with more than 50% reads in UMI
       filter(umi_fraction_filter == 'pass') %>%

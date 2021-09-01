@@ -29,6 +29,9 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+gatk --version
+exit
+
 # merge multiple sequencing runs if not already done:
 #cat ${exome_dir}/${sample}_Snum_L004_R1_001.fastq.gz ${exome_dir}/${sample}_S0_L009_R1_001.fastq.gz > ${combined_dir}/${sample}_Snum_L004_R1_001.fastq.gz
 #cat ${exome_dir}/${sample}_Snum_L004_R2_001.fastq.gz ${exome_dir}/${sample}_S0_L009_R2_001.fastq.gz > ${combined_dir}/${sample}_Snum_L004_R2_001.fastq.gz
