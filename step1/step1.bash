@@ -24,17 +24,17 @@ while [ $# -gt 0 ]; do
     if [[ $1 == *"--"* ]]; then
       param="${1/--/}"
       declare $param="$2"
-      echo $1 $2 // Optional to see the parameter:value result
+      echo $1 $2 #// Optional to see the parameter:value result
     fi       
   shift
 done
 
-gatk --version
-exit
-
 # merge multiple sequencing runs if not already done:
 #cat ${exome_dir}/${sample}_Snum_L004_R1_001.fastq.gz ${exome_dir}/${sample}_S0_L009_R1_001.fastq.gz > ${combined_dir}/${sample}_Snum_L004_R1_001.fastq.gz
 #cat ${exome_dir}/${sample}_Snum_L004_R2_001.fastq.gz ${exome_dir}/${sample}_S0_L009_R2_001.fastq.gz > ${combined_dir}/${sample}_Snum_L004_R2_001.fastq.gz
+
+file "${exome_dir}/${r1_filename}" 
+file "${exome_dir}/${r2_filename}"
 
 # trim sequences with adapters remove unpaired sequences:
 trim_galore -j ${num_cores} --paired "${exome_dir}/${r1_filename}" "${exome_dir}/${r2_filename}" -o "${exome_dir}"

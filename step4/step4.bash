@@ -36,12 +36,14 @@ gatk --java-options "-Xmx1G" VariantFiltration \
 awk -F '\t' '{if($0 ~ /\#/) print; else if($7 == "PASS") print}' ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR.vcf > ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS.vcf
 
 Rscript ${filter_snp_script} ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS.vcf ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
-yes | gunzip ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
+gunzip -f ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf.gz
 
 gatk --java-options "-Xmx1G" SelectVariants \
   -V ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_PASS_single.vcf \
   -O ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP.vcf.gz \
   -select-type SNP
+
+gunzip -f -c ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP.vcf.gz > ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP.vcf
 
 cat ${ref_file} | bcftools consensus ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP.vcf.gz > ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa
 samtools faidx ${snp_dir}/${sample}_SM_bwa_RawSNPs_FLTR_SNP_consensus.fa
