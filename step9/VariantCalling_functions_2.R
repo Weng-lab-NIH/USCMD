@@ -81,12 +81,16 @@ score.mutations <- function(mutations, point, read,
     filter.mutect <- mutations %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 2, 'pass', 'fail')) %>%
-      mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > exome_DP_filter & sc_AD > sc_AD_filter & sc_DP > sc_DP_filter, 
+      mutate(mutect_filter = ifelse(DP >= exome_DP_filter & sc_AD >= sc_AD_filter & sc_DP >= sc_DP_filter, 
         'pass', 'fail')) %>%
       filter(mutect_filter == 'pass') %>%
       dplyr::select(bc,Chr,POS,ALT,mutect_filter)
+    # print("filter.mutect$mutect_filter")
+    # print(filter.mutect$mutect_filter)
     mutations.filtered <- mutations.filtered %>% left_join(filter.mutect, by = c('bc','Chr','POS','ALT'))
-   
+    # print("mutations.filtered")
+    # print(mutations.filtered)
+
    print('passed mutect filter')
    
     # For Candidates for Correction:
@@ -102,18 +106,26 @@ score.mutations <- function(mutations, point, read,
     point.reads <- point %>%
       inner_join(read, by = 'read') %>%
       mutate(donor = sam)
+    # print("point.reads")
+    # print(point.reads)
       
-    print('mutations reformatted')
-    # print("mutations.filtered$mutect_filter")
+    # print('mutations reformatted')
     # print(mutations.filtered$mutect_filter)
+    # print(mutations.filtered$bc)
     
     # FILTER:
     
     # Filter Point Mutations using the candidate list:
     # (Just making sure the candidates are the same as original data)
-    candidate_positions <- mutations.filtered %>% filter(mutect_filter == 'pass') %>% dplyr::select(bc, Chr, POS)
+    candidate_positions <- mutations.filtered %>% 
+      filter(mutect_filter == 'pass') %>% 
+      dplyr::select(bc, Chr, POS)
+    # print("candidate_positions")
+    # print(candidate_positions)
     point.reads.filter <- inner_join(point.reads, candidate_positions, by = c('bc','Chr','POS'))
-  
+    # print("point.reads.filter")
+    # print(point.reads.filter)
+
     # Remove any point mutations with less than 2 reads in a UMI:
     # (These can't be corrected)
     filter.reads.in.umi <- point.reads.filter %>% group_by(bc,Chr,POS,umi) %>%
@@ -128,11 +140,15 @@ score.mutations <- function(mutations, point, read,
     
     # Remove point mutations with fewer than 50% of supporting reads in a UMI:
     # (These are likely errors)
+    # print("filter.reads.in.umi")
+    # print(filter.reads.in.umi)
     read.umi.fraction.filter <- filter.reads.in.umi %>% 
       ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads.filter, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT) %>%
       summarise(num = n(), verbose = F) %>%
       group_by(bc,Chr,POS,umi) 
+    # print("read.umi.fraction.filter")
+    # print(read.umi.fraction.filter)
     read.umi.fraction.filter <- read.umi.fraction.filter %>%
       mutate(umi_fraction = num / sum(num)) %>% # Fraction of each base in UMI
       mutate(umi_fraction_filter = ifelse(umi_fraction > 0.5, 'pass', 'fail')) %>% # Keep bases with more than 50% reads in UMI

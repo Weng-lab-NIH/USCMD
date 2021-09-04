@@ -14,18 +14,33 @@ out_name <- args[2]
 
 # Load Data:
 mutations <- read.vcfR(filename)
+print("in filter_SNPs.R yadayada")
 
 #_______________________________
 
 # Remove the SNPS with alternate alleles:
-locations <- which(nchar(mutations@fix[,'ALT']) == 1)
-mutations@fix <- mutations@fix[locations,]
-mutations@gt <- mutations@gt[locations,]
+temp_fix <- as.data.frame(mutations@fix)
+
+temp_fix <- temp_fix %>%
+  dplyr::mutate(alt_len=length(ALT), ref_len=length(REF)) %>% 
+  dplyr::mutate(keep = ref_len==1 & (
+    (alt_len == 1 ) | (str_detect(ALT, "[ATCG],[ATCG]") )
+    )
+  )
+
+locations <- which(temp_fix$keep == T)
+mutations@fix <- mutations@fix[locations,,drop=F]
+mutations@gt <- mutations@gt[locations,,drop=F]
+
+
+# DEAL WITH DOUBLE SNPs
+
+
 
 # Filter SNPs (remove all other variant types):
-locations <- which(nchar(mutations@fix[,'REF']) == 1)
-mutations@fix <- mutations@fix[locations,]
-mutations@gt <- mutations@gt[locations,]
+# locations <- which(nchar(mutations@fix[,'REF']) == 1)
+# mutations@fix <- mutations@fix[locations,]
+# mutations@gt <- mutations@gt[locations,]
 
 #_______________________________
 

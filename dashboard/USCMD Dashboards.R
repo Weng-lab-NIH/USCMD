@@ -63,7 +63,7 @@ for (i in 1:nrow(donor_df)){
   umi_count <- sum(umi_counts)
 
 
-  step9_path <- file.path(pipeline_dir, "step9_out", "ScoredMutations.csv")
+  step9_path <- file.path(pipeline_dir, "step9_out", "filtered_ScoredMutations.csv")
   step9_csv <- read.csv(step9_path, header=T)
   # print("step9_csv")
   # print(head(step9_csv))
@@ -81,6 +81,9 @@ for (i in 1:nrow(donor_df)){
     next
   }
 
+  umi_pass <- umi_pass %>%
+    dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, 
+      bc)
   all_umi_pass[[i]] <- umi_pass
 
   false_neg <- step9_csv %>%
@@ -108,19 +111,23 @@ for (i in 1:nrow(donor_df)){
 # print(sapply(constructed_df, class))
 combined_df <- inner_join(donor_df, constructed_df, by="sample_name")
 print(all_umi_pass)
+print(all_umi_pass)
 all_umi_pass <- bind_rows(all_umi_pass)
-#print("all_umi_pass")
-#print(all_umi_pass)
+num_umi_pass <- dim(all_umi_pass)[1]
+print(paste("num_umi_pass:", num_umi_pass))
 
 print("starting top_gene stuff")
 top_genes <- all_umi_pass %>% 
   count(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, sort = TRUE) %>%
   filter(!grepl( "-", ENSEMBL_GENE_ID)) %>%
-  filter(!is.na(AA_CHANGE)) %>%  
-  top_n(10)
-#print(top_genes)
+  #filter(!is.na(AA_CHANGE)) %>%  
+  top_n(min(10, num_umi_pass))
+print("top_genes")
+print(top_genes)
 
 top_gene_summary <- bind_rows(lapply(top_genes$ENSEMBL_GENE_ID, ensembl_id_conversion))
+print("top gene summary")
+print(top_gene_summary)
 top_gene_summary <- top_gene_summary %>%
   mutate(num_cells = top_genes$n,
     Chromosome = top_genes$Chr,

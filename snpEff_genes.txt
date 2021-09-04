@@ -1,3 +1,2 @@
 # The following table is formatted as tab separated values. 
-#GeneName	GeneId	TranscriptId	BioType	variants_impact_MODIFIER	variants_effect_upstream_gene_variant
-DDX11L8	ENSG00000256263	ENST00000535849	unprocessed_pseudogene	1	1
+#GeneName	GeneId	TranscriptId	BioType
