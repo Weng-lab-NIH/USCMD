@@ -14,12 +14,17 @@ ensembl_id_conversion <- function(ensembl_id){
 #   print(ensembl_id)
   converted <- getBM(values=ensembl_id,
     filters= "ensembl_gene_id", 
+<<<<<<< HEAD
     attributes= c("ensembl_gene_id","external_gene_name", "description"),
     mart= mart)
   if(length(converted == 0)){
     return(c("ensembl_gene_id" = NA,"external_gene_name" = NA, 
       "description" = NA))
   }
+=======
+    attributes= c("external_gene_name", "description"),
+    mart= mart)
+>>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   # print(converted)
   # print(class(converted))
   # print("********")
@@ -67,7 +72,11 @@ for (i in 1:nrow(donor_df)){
   umi_count <- sum(umi_counts)
 
 
+<<<<<<< HEAD
   step9_path <- file.path(pipeline_dir, "step9_out", "filtered_ScoredMutations.csv")
+=======
+  step9_path <- file.path(pipeline_dir, "step9_out", "ScoredMutations.csv")
+>>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   step9_csv <- read.csv(step9_path, header=T)
   # print("step9_csv")
   # print(head(step9_csv))
@@ -85,9 +94,12 @@ for (i in 1:nrow(donor_df)){
     next
   }
 
+<<<<<<< HEAD
   umi_pass <- umi_pass %>%
     dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, 
       bc)
+=======
+>>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   all_umi_pass[[i]] <- umi_pass
 
   false_neg <- step9_csv %>%
@@ -99,6 +111,12 @@ for (i in 1:nrow(donor_df)){
   num_mut_per_cell <- umi_pass %>% 
     group_by(bc) %>% tally()
 
+<<<<<<< HEAD
+=======
+  print(num_mut_per_cell)
+  #nbGLM <- glm.nb(log2_mut ~ umi + coverage + ex_coverage, data=muts.per.cell)
+
+>>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   constructed_df <- rbind(constructed_df, 
     data.frame (sample_name = sample_name,
       pre_UMI_num = pre_UMI_num,

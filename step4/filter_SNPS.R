@@ -14,7 +14,6 @@ out_name <- args[2]
 
 # Load Data:
 mutations <- read.vcfR(filename)
-print("in filter_SNPs.R yadayada")
 
 #_______________________________
 
@@ -24,7 +23,7 @@ temp_fix <- as.data.frame(mutations@fix)
 temp_fix <- temp_fix %>%
   dplyr::mutate(alt_len=length(ALT), ref_len=length(REF)) %>% 
   dplyr::mutate(keep = ref_len==1 & (
-    (alt_len == 1 ) | (str_detect(ALT, "[ATCG],[ATCG]") )
+    (alt_len == 1 ) #| (str_detect(ALT, "[ATCG],[ATCG]") )
     )
   )
 
