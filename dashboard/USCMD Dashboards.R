@@ -14,8 +14,12 @@ ensembl_id_conversion <- function(ensembl_id){
 #   print(ensembl_id)
   converted <- getBM(values=ensembl_id,
     filters= "ensembl_gene_id", 
-    attributes= c("external_gene_name", "description"),
+    attributes= c("ensembl_gene_id","external_gene_name", "description"),
     mart= mart)
+  if(length(converted == 0)){
+    return(c("ensembl_gene_id" = NA,"external_gene_name" = NA, 
+      "description" = NA))
+  }
   # print(converted)
   # print(class(converted))
   # print("********")
@@ -95,9 +99,6 @@ for (i in 1:nrow(donor_df)){
   num_mut_per_cell <- umi_pass %>% 
     group_by(bc) %>% tally()
 
-  print(num_mut_per_cell)
-  #nbGLM <- glm.nb(log2_mut ~ umi + coverage + ex_coverage, data=muts.per.cell)
-
   constructed_df <- rbind(constructed_df, 
     data.frame (sample_name = sample_name,
       pre_UMI_num = pre_UMI_num,
@@ -126,18 +127,16 @@ print("top_genes")
 print(top_genes)
 
 top_gene_summary <- bind_rows(lapply(top_genes$ENSEMBL_GENE_ID, ensembl_id_conversion))
-print("top gene summary")
+print("top gene summary before  join")
 print(top_gene_summary)
 top_gene_summary <- top_gene_summary %>%
-  mutate(num_cells = top_genes$n,
-    Chromosome = top_genes$Chr,
-    Position = top_genes$POS,
-    NT_mutated_from = top_genes$REF,
-    NT_mutated_to = top_genes$ALT,
-    AA_CHANGE = top_genes$AA_CHANGE) %>%
-  rename(gene_description = description,
-    gene_id = external_gene_name)
+  full_join(top_genes, by=c("ensembl_gene_id" = "ENSEMBL_GENE_ID"))
+print("top gene summary after  join")
+print(top_gene_summary)
 
+print(num_mut_per_cell)
+nbGLM <- glm.nb(log2_mut ~ umi + coverage + ex_coverage, data=muts.per.cell)
+muts.per.cell$norm_mut = (nbGLM$residuals + nbGLM[["coefficients"]][["(Intercept)"]])
 
 ## app.R ##
 ui <- dashboardPage(

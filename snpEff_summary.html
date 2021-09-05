@@ -145,7 +145,7 @@ th a:active, th a:hover {
 	</tr>
 	<tr bgcolor=dddddd> 
 		<td valign=top> <b> Date </b> </td>
-		<td> 2021-09-04 07:04 </td>
+		<td> 2021-09-05 16:17 </td>
 	</tr>
 	<tr bgcolor=ffffff> 
 		<td valign=top> <b> SnpEff version </b> </td>
@@ -154,7 +154,7 @@ th a:active, th a:hover {
 	<tr bgcolor=dddddd> 
 		<td valign=top> <b> Command line arguments </b> </td>
 		<td> <pre>SnpEff  -no-downstream -no-upstream GRCh38.99 
-artificial_run_2021_09_01_debugged/SYN_F2/step5_out//mutations_NoIntervals/SYN_F2_AAACCCAAGAAACACT-1_var_FLTR.vcf 
+artificial_run_2021_09_05_debugged/SYN_F2/step5_out//mutations_NoIntervals/SYN_F2_AAACCCAAGAAACCCA-1_var_FLTR.vcf 
 </pre> </td>
 	</tr>
 	<tr bgcolor=ffffff> 
@@ -571,6 +571,91 @@ Missense / Silent ratio: 0
 <b> Variants by chromosome</b><p> 
 
 <center>
+</center>
+
+<!--==========================================================================
+	Variants by gene 
+	========================================================================== -->
+
+<center>
+	<hr>
+	<b> Details by gene </b><p>
+	<p>
+	<b><a href="snpEff_genes.txt">Here</a></b> you can find a tab-separated table.
+</center>
+</div>
+</center>n change table
+	========================================================================== -->
+	
+<hr> 
+<a name="codonChanges">
+<center>
+<b> Codon changes</b> <p>
+
+	<div class="note">
+		How to read this table: <br>
+		- Rows are reference codons and columns are changed codons. E.g. Row 'AAA' column 'TAA' indicates how many 'AAA' codons have been replaced by 'TAA' codons.<br>
+		- Red background colors indicate that more changes happened (heat-map).<br>
+		- Diagonals are indicated using grey background color <br> 
+		- WARNING: This table may include different translation codon tables (e.g. mamalian DNA and mitochondrial DNA).<br>
+		<p>
+	</div><p>
+
+  
+<table border=1>
+	<thead>
+		<tr> 
+			<th> &nbsp; </th>
+			
+		</tr>
+	</thead>
+</table>
+</center>
+
+<!--==========================================================================
+	Amino acid change table
+	========================================================================== -->
+
+<hr> 
+<a name="aaChanges">
+<center>
+<b> Amino acid changes</b><p> 
+
+	<div class="note">
+		How to read this table: <br>
+		- Rows are reference amino acids and columns are changed amino acids. E.g. Row 'A' column 'E' indicates how many 'A' amino acids have been replaced by 'E' amino acids.<br>
+		- Red background colors indicate that more changes happened (heat-map).<br>
+		- Diagonals are indicated using grey background color <br> 
+		- WARNING: This table may include different translation codon tables (e.g. mamalian DNA and mitochondrial DNA).<br>
+		<p>
+	</div><p>
+
+<table border=1>
+	<thead>
+		<tr> 
+			<th> &nbsp; </th>
+			
+		</tr>
+	</thead>
+</table>
+</center>
+
+<!--==========================================================================
+	Chromosome variants table
+	========================================================================== -->
+
+<hr> 
+<a name="chrChanges">
+<center>
+<b> Variants by chromosome</b><p> 
+
+<center>
+	<pre>
+		<img src="http://chart.apis.google.com/chart?cht=bvg&chbh=8,4,2&chs=800x300&chxt=y,y,x,x&chxp=1,50.0|3,50.0&chtt=Variants+histogram%3A+12&chxr=0,0.0,1.0|1,0.0,100.0|3,0.0,100.0&chxl=1:|Variants%2F1000Kb|2:|0|||||||||||||13000000|||||||||||||26000000|||||||||||||39000000|||||||||||||52000000|||||||||||||65000000|||||||||||||78000000|||||||||||||91000000|||||||||||||104000000|||||||||||||117000000|||||||||||||130000000|||133000000|3:|Position&chd=e:..AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"><br>
+		12, Position,0,1000000,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000,10000000,11000000,12000000,13000000,14000000,15000000,16000000,17000000,18000000,19000000,20000000,21000000,22000000,23000000,24000000,25000000,26000000,27000000,28000000,29000000,30000000,31000000,32000000,33000000,34000000,35000000,36000000,37000000,38000000,39000000,40000000,41000000,42000000,43000000,44000000,45000000,46000000,47000000,48000000,49000000,50000000,51000000,52000000,53000000,54000000,55000000,56000000,57000000,58000000,59000000,60000000,61000000,62000000,63000000,64000000,65000000,66000000,67000000,68000000,69000000,70000000,71000000,72000000,73000000,74000000,75000000,76000000,77000000,78000000,79000000,80000000,81000000,82000000,83000000,84000000,85000000,86000000,87000000,88000000,89000000,90000000,91000000,92000000,93000000,94000000,95000000,96000000,97000000,98000000,99000000,100000000,101000000,102000000,103000000,104000000,105000000,106000000,107000000,108000000,109000000,110000000,111000000,112000000,113000000,114000000,115000000,116000000,117000000,118000000,119000000,120000000,121000000,122000000,123000000,124000000,125000000,126000000,127000000,128000000,129000000,130000000,131000000,132000000,133000000
+12,Count,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+	</pre>
 </center>
 
 <!--==========================================================================
