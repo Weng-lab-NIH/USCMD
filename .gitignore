@@ -9,3 +9,5 @@ real*/
 submit*
 *.vcf
 **/*.vcf
+.tmp
+
