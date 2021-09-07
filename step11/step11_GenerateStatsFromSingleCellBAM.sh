@@ -20,7 +20,8 @@ rm -f  ${Outdir}/mutations.csv
 for Sample in ${DataDirectory}/*.bam
 do
     echo arguments read in $Sample
-    READ_EXOME=$(samtools view -c -F 4 -L ${Targets} ${Sample})
+    #READ_EXOME=$(samtools view -c -F 4 -L ${Targets} ${Sample})
+    READ_EXOME=$(samtools view -c -L ${Targets} ${Sample})
     echo read_exome done $READ_EXOME
     READ_SAM=$(samtools view -c -F 4 ${Sample})
     echo read_sam done $READ_SAM

@@ -6,6 +6,7 @@ library(tidyverse)
 library(argparse)
 library(biomaRt)
 library(MASS)
+library(lme4)
 
 ensembl_id_conversion <- function(ensembl_id){
 
@@ -14,17 +15,12 @@ ensembl_id_conversion <- function(ensembl_id){
 #   print(ensembl_id)
   converted <- getBM(values=ensembl_id,
     filters= "ensembl_gene_id", 
-<<<<<<< HEAD
     attributes= c("ensembl_gene_id","external_gene_name", "description"),
     mart= mart)
   if(length(converted == 0)){
     return(c("ensembl_gene_id" = NA,"external_gene_name" = NA, 
       "description" = NA))
   }
-=======
-    attributes= c("external_gene_name", "description"),
-    mart= mart)
->>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   # print(converted)
   # print(class(converted))
   # print("********")
@@ -48,6 +44,14 @@ constructed_df <- data.frame(
 
 all_umi_pass <- list()
 
+data_per_cell <- data.frame(
+  sample = character(),
+  log2_mut = numeric(),
+  UMI = numeric(),
+  COV = numeric(),
+  COV_EXOME = numeric()
+)
+
 for (i in 1:nrow(donor_df)){
   pipeline_dir <- donor_df[i,4]
   sample_name <- donor_df[i, 1]
@@ -66,17 +70,16 @@ for (i in 1:nrow(donor_df)){
     "UMI",
     "COV_EXOME",
     "COV")
-  print("step11_csv")
+  pattern_to_remove <- paste0("^.*/step2_out/+.*/")
+  print(pattern_to_remove)
+  step11_csv <- mutate_at(step11_csv, "Sample", str_replace, pattern_to_remove, "") %>%
+    mutate_at("Sample", str_replace, ".bam", "") %>%
+    mutate_at("Sample", str_sub, -18)
   print(head(step11_csv))
   umi_counts <- step11_csv$V4
   umi_count <- sum(umi_counts)
 
-
-<<<<<<< HEAD
   step9_path <- file.path(pipeline_dir, "step9_out", "filtered_ScoredMutations.csv")
-=======
-  step9_path <- file.path(pipeline_dir, "step9_out", "ScoredMutations.csv")
->>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   step9_csv <- read.csv(step9_path, header=T)
   # print("step9_csv")
   # print(head(step9_csv))
@@ -85,7 +88,8 @@ for (i in 1:nrow(donor_df)){
   pre_UMI_num <- nrow(mutect_pass)
 
   umi_pass <- step9_csv %>%
-    filter(umi_fraction_filter == 'pass' | recovered_double==T) 
+    filter(umi_fraction_filter == 'pass' | recovered_double==T) %>%
+    dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   post_UMI_num <- nrow(umi_pass)
 
   # print("umi_pass")
@@ -94,12 +98,6 @@ for (i in 1:nrow(donor_df)){
     next
   }
 
-<<<<<<< HEAD
-  umi_pass <- umi_pass %>%
-    dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, 
-      bc)
-=======
->>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   all_umi_pass[[i]] <- umi_pass
 
   false_neg <- step9_csv %>%
@@ -110,13 +108,17 @@ for (i in 1:nrow(donor_df)){
   #normalized counts
   num_mut_per_cell <- umi_pass %>% 
     group_by(bc) %>% tally()
+  # print("num_mut_per_cell")
+  # print(num_mut_per_cell)
+  num_mut_per_cell$log2_mut <- log2(num_mut_per_cell$n + 1)
+  new_data_per_cell <- full_join(num_mut_per_cell, step11_csv, 
+    by = c('bc'='Sample')) %>%
+    replace_na(list("n"=1, "log2_mut"=0))
+  new_data_per_cell$sample <- sample_name
+  
+  data_per_cell <- rbind(data_per_cell, new_data_per_cell)
 
-<<<<<<< HEAD
-=======
-  print(num_mut_per_cell)
-  #nbGLM <- glm.nb(log2_mut ~ umi + coverage + ex_coverage, data=muts.per.cell)
 
->>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3
   constructed_df <- rbind(constructed_df, 
     data.frame (sample_name = sample_name,
       pre_UMI_num = pre_UMI_num,
@@ -129,32 +131,35 @@ for (i in 1:nrow(donor_df)){
 # print(sapply(donor_df, class))
 # print(sapply(constructed_df, class))
 combined_df <- inner_join(donor_df, constructed_df, by="sample_name")
-print(all_umi_pass)
-print(all_umi_pass)
 all_umi_pass <- bind_rows(all_umi_pass)
 num_umi_pass <- dim(all_umi_pass)[1]
-print(paste("num_umi_pass:", num_umi_pass))
 
-print("starting top_gene stuff")
 top_genes <- all_umi_pass %>% 
   count(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, sort = TRUE) %>%
   filter(!grepl( "-", ENSEMBL_GENE_ID)) %>%
   #filter(!is.na(AA_CHANGE)) %>%  
   top_n(min(10, num_umi_pass))
-print("top_genes")
-print(top_genes)
 
 top_gene_summary <- bind_rows(lapply(top_genes$ENSEMBL_GENE_ID, ensembl_id_conversion))
-print("top gene summary before  join")
-print(top_gene_summary)
 top_gene_summary <- top_gene_summary %>%
   full_join(top_genes, by=c("ensembl_gene_id" = "ENSEMBL_GENE_ID"))
-print("top gene summary after  join")
-print(top_gene_summary)
 
-print(num_mut_per_cell)
-nbGLM <- glm.nb(log2_mut ~ umi + coverage + ex_coverage, data=muts.per.cell)
-muts.per.cell$norm_mut = (nbGLM$residuals + nbGLM[["coefficients"]][["(Intercept)"]])
+print("data_per_cell")
+print(data_per_cell)
+
+nbGLM <- glm.nb(log2_mut ~ UMI + COV + COV_EXOME, 
+  data=data_per_cell)
+data_per_cell$norm_mut = (nbGLM$residuals + nbGLM[["coefficients"]][["(Intercept)"]])
+
+adj_quantile <- quantile(data_per_cell$norm_mut, probs = c(0.001,0.999))
+data_per_cell[data_per_cell$norm_mut < min(adj_quantile),]$norm_mut <- min(adj_quantile)
+data_per_cell[data_per_cell$norm_mut > max(adj_quantile),]$norm_mut <- max(adj_quantile)
+value <- data_per_cell$norm_mut
+data_per_cell$scale_mut <- (value - min(value)) / (max(value) - min(value)) * max(data_per_cell$n) 
+
+scaled_mut_num <- group_by(data_per_cell, sample) %>%
+  tally() %>% rename(sample_name = sample)
+combined_df$scaled_mut_num <- scaled_mut_num$n
 
 ## app.R ##
 ui <- dashboardPage(
@@ -223,12 +228,13 @@ server <- function(input, output) {
   output$plot1 <- renderPlot({
     data <- combined_df %>%
       pivot_longer(
-        cols = ends_with("UMI_num"),
+        cols = ends_with("_num"),
         names_to = "correction_state",
         values_to = "num_mutation"
         ) %>%
       mutate(correction_state = factor(correction_state, 
-        levels=c("pre_UMI_num", "post_UMI_num")))
+        levels=c("pre_UMI_num", "post_UMI_num", "scaled_mut_num"))) %>%
+      drop_na()
     #print("**********************, data")
     #print(data)
     ggplot(data, aes(x=sample_name, y=num_mutation, group = correction_state)) +
