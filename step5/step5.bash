@@ -21,7 +21,7 @@ done
 Rscript --version
 rm -f ${out_dir}/mutations_NoIntervals/mutations.csv
 
-Rscript `dirname "$0"`/step5_v2.R \
+Rscript `dirname "$0"`/step5.R \
 $sample \
 $aligned_dir \
 $scBAMs \
