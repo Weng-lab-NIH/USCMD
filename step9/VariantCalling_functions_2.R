@@ -98,6 +98,8 @@ score.mutations <- function(mutations, point, read,
     colnames(point) <- c('read','zero','flag','Chr','p','ALT','qual','POS','i','j')
     point <- point %>% filter(ALT != '.')
     
+    print("colnames(read")
+    print(colnames(read))
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)
@@ -177,6 +179,8 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     colnames(point) <- c('read','zero','flag','Chr','p','ALT','qual','POS','i','j')
     point <- point %>% filter(ALT != '.')
     
+    print("colnames(read")
+    print(colnames(read))
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)

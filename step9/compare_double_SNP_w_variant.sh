@@ -4,12 +4,14 @@
 ## check SNP consensus files to see if these positions can be found.
 ## if there is a SNP at the same spot and it is the same as the double_variant,
 ## output that line. 
-echo compare_double_variant_w_SNPS
+echo compare_double_SNP_w_variant.sh
 input_csv=$1
-vcf_file=$2
+double_snp_csv=$2
 outpath=$3
 
-echo "outpath=${outpath} input_csv=${input_csv} vcf_file=${vcf_file}"
+echo "outpath=${outpath} input_csv=${input_csv} double_snp_csv=${double_snp_csv}"
+
+cat $double_snp_csv
 
 chr_list=($(cat ${input_csv} | cut -d ',' -f 1 | sed 's/"//g'))
 pos_list=($(cat ${input_csv} | cut -d ',' -f 2 | sed 's/"//g'))
@@ -26,17 +28,16 @@ for rr in $(seq 1 $all_vals); do
 	chr=${chr_list[$rr]}
 	sc_alt=${sc_alt_list[$rr]}
 
+
 	echo "looking at $chr $pos with sc_alt $sc_alt"
-	grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file
+	grep "\"${chr}\",\"${pos}\",\".\",\"${sc_alt}\"" $double_snp_csv
 	if [ $? -eq 0 ]; then
 		let found=found+1
-		my_ref=$(grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file | cut -f 4)
-		SNP=$(grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file | cut -f 5)
-		echo "SNP: $SNP sc_alt: $sc_alt"
-		if [ "$SNP" == "$sc_alt" ]; then
-			my_line=$(echo ${chr},${pos},${my_ref},${SNP},\"${sc_alt}\")
-			found_lines=(${found_lines[@]} $my_line)
-		fi
+		ref=$(grep "\"${chr}\",\"${pos}\",\".\",\"${sc_alt}\"" $double_snp_csv | cut -d, -f 3)
+		SNP=$(grep "\"${chr}\",\"${pos}\",\".\",\"${sc_alt}\"" $double_snp_csv | cut -d, -f 4)
+		my_line=$(echo ${chr},${pos},${ref},${SNP},\"${sc_alt}\")
+		found_lines=(${found_lines[@]} $my_line)
+		echo "$my_line"
 	fi
 done
 
