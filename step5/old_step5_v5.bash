@@ -21,7 +21,7 @@ done
 Rscript --version
 rm -f ${out_dir}/mutations_NoIntervals/mutations.csv
 
-Rscript `dirname "$0"`/old_step5_v4.R \
+Rscript `dirname "$0"`/old_step5_v5.R \
 $sample \
 $aligned_dir \
 $scBAMs \
@@ -30,6 +30,10 @@ $ref_10x \
 $scripts_dir \
 $out_dir \
 $num_cores
+
+TL_file="${out_dir}/TL/TL_${sample}_1"
+head -n 2 $TL_file > ${TL_file}_tmp
+mv ${TL_file}_tmp ${TL_file}
 
 for i in $(ls ${scripts_dir}/VARIANTS*bash); do
   bash $i

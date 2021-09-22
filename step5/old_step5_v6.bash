@@ -21,7 +21,7 @@ done
 Rscript --version
 rm -f ${out_dir}/mutations_NoIntervals/mutations.csv
 
-Rscript `dirname "$0"`/old_step5_v4.R \
+Rscript `dirname "$0"`/old_step5_v6.R \
 $sample \
 $aligned_dir \
 $scBAMs \
@@ -30,6 +30,7 @@ $ref_10x \
 $scripts_dir \
 $out_dir \
 $num_cores
+
 
 for i in $(ls ${scripts_dir}/VARIANTS*bash); do
   bash $i

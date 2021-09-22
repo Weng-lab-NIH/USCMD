@@ -9,8 +9,8 @@ real*/
 submit*
 *.vcf
 **/*.vcf
-<<<<<<< HEAD
 .tmp
+.tmp/
+**/*.log
+*.log
 
-=======
->>>>>>> 4cfa1e825c19f7c12974713d4140b4b16c6dc3e3

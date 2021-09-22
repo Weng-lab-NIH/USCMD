@@ -41,8 +41,8 @@ temp_fix <- temp_fix %>%
 temp_fix <- temp_fix %>% 
   dplyr::mutate(double_snp = alt_len == 3 & str_detect(ALT, "[ATCG],[ATCG]")) %>%
   dplyr::mutate(keep = ref_len == 1 & (alt_len == 1 | double_snp==T )) 
-print("temp_fix$double_snp")
-print(temp_fix$double_snp)
+#print("temp_fix$double_snp")
+#print(temp_fix$double_snp)
 
 # SAVE DOUBLE SNPs
 double_snp_df <- filter(temp_fix, double_snp == T)
@@ -53,8 +53,8 @@ temp_fix <- dplyr::mutate(temp_fix,
   ALT = str_replace(ALT, ",[ATCG]", ""),
   INFO = str_replace(INFO, ",.*;", ";")
   )
-print(temp_fix)
-print(as.data.frame(mutations@gt))
+# print(temp_fix)
+# print(as.data.frame(mutations@gt))
 locations <- which(temp_fix$keep == T)
 mutations@fix[,"ALT"] <- temp_fix$ALT
 mutations@fix[,"INFO"] <- temp_fix$INFO
