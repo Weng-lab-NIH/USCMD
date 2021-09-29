@@ -27,10 +27,11 @@ echo out_dir: ${out_dir}
 
 # GENERATE MUTATION SCORES:
 echo "filters: ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter}"
-Rscript `dirname "$0"`/step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter} ${out_dir} `dirname "$0"`/VariantCalling_functions_2.R
+Rscript `dirname "$0"`/step9_ScoreMutations_copy.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter} ${out_dir} `dirname "$0"`/VariantCalling_functions_2_copy.R
 
 # FILTER OUTPUT VARIANTS
-echo chr,POS,REF,SNP,SC_ALT > ${out_dir}/variants_to_remove.csv
+# echo chr,POS,REF,SNP,SC_ALT > ${out_dir}/variants_to_remove.csv
+touch ${out_dir}/variants_to_remove.csv
 bash `dirname "$0"`/compare_double_variant_w_SNPs.sh ${out_dir}/RecoveredDoubles.csv ${SNPs_vcf} ${out_dir}/variants_to_remove.csv
 bash `dirname "$0"`/compare_double_SNP_w_variant.sh ${out_dir}/ScoredMutations.csv ${double_SNP_csv} ${out_dir}/variants_to_remove.csv
 bash `dirname "$0"`/remove_variants.bash ${out_dir}/variants_to_remove.csv ${out_dir}/ScoredMutations.csv ${out_dir}/RecoveredDoubles.csv ${out_dir}

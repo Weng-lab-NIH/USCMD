@@ -16,6 +16,7 @@ pos_list=($(cat ${input_csv} | cut -d ',' -f 2 | sed 's/"//g'))
 sc_alt_list=($(cat ${input_csv} | cut -d ',' -f 5 | sed 's/"//g'))
 
 all_vals=$(echo ${#chr_list[@]}-1 | bc)
+tail $vcf_file
 
 checked=0
 found=0
@@ -26,7 +27,7 @@ for rr in $(seq 1 $all_vals); do
 	chr=${chr_list[$rr]}
 	sc_alt=${sc_alt_list[$rr]}
 
-	#echo "looking at $chr $pos with sc_alt $sc_alt"
+	echo "looking at $chr $pos with sc_alt $sc_alt"
 	grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file
 	if [ $? -eq 0 ]; then
 		let found=found+1
@@ -44,5 +45,6 @@ done
 #echo ${found_lines[@]}
 
 for i in ${found_lines[@]}; do 
+	echo $i
 	echo $i >> ${outpath}
 done

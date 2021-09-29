@@ -49,20 +49,43 @@ for (i in 1:nrow(donor_df)) {
   # print(pipeline_dir)
   print(sample_name)
 
+  step2_dir <- file.path(pipeline_dir, "step2_out", "*", "*.bai")
+  num_cells <- Sys.glob( step2_dir) 
+  num_cells <- length(num_cells)
+
+  # step9_path <- file.path(pipeline_dir, "step9", "filtered_ScoredMutations.csv")
   step9_path <- file.path(pipeline_dir, "step9", "ScoredMutations.csv")
   step9_csv <- read.csv(step9_path, header=T)
+  print("step9_csv")
+  print(dim(step9_csv))
+  print(table(step9_csv$mutect_filter))
   mutect_pass <- step9_csv %>%
     filter(mutect_filter == 'pass')
   pre_UMI_num <- nrow(mutect_pass)
+  print("pre_UMI_num")
+  print(pre_UMI_num)
 
+  # umi_pass <- step9_csv %>%
+  #   filter(( reads_in_umi_filter == 'pass') | recovered_double==T) %>%
+  #   dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   umi_pass <- step9_csv %>%
-    filter(umi_fraction_filter == 'pass' | recovered_double==T) %>%
-    dplyr::select(!matches("GERMQ"))
+    filter(( reads_in_umi_filter == 'pass') ) %>%
+    dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
+  # umi_pass <- step9_csv %>%
+  #   filter((reads_in_umi_filter == 'pass' & umi_fraction_filter == 'pass') | recovered_double==T) %>%
+  #   dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   post_UMI_num <- nrow(umi_pass)
 
+  print("umi_pass")
+  print(nrow(umi_pass))
+  print(unique(step9_csv$reads_in_umi_filter))
+  print(unique(step9_csv$umi_fraction_filter))
+  print(table(step9_csv$reads_in_umi_filter, step9_csv$umi_fraction_filter))
+  if (nrow(umi_pass)==0){
+    next
+  }
+
   all_umi_pass[[i]] <- umi_pass
-  #print(head(umi_pass$GERMQ))
-  #print(head(umi_pass))
 
   false_neg <- step9_csv %>%
     filter(recovered_double==T)  
@@ -72,15 +95,18 @@ for (i in 1:nrow(donor_df)) {
     data.frame (sample_name = sample_name,
       pre_UMI_num = pre_UMI_num,
       post_UMI_num = post_UMI_num,
-      false_neg_num = false_neg_num
-      )
+      false_neg_num = false_neg_num,
+      num_cells = num_cells)
     )
 }
 # print(donor_df)
 # print(constructed_df)
 combined_df <- inner_join(donor_df, constructed_df, by="sample_name")
-print("here")
+#print("here")
+#print(all_umi_pass)
 all_umi_pass <- bind_rows(all_umi_pass)
+print("all_umi_pass")
+print(dim(all_umi_pass))
 # print("all_umi_pass")
 # print(all_umi_pass)
 

@@ -11,7 +11,7 @@ outpath=$3
 
 echo "outpath=${outpath} input_csv=${input_csv} double_snp_csv=${double_snp_csv}"
 
-cat $double_snp_csv
+#cat $double_snp_csv
 
 chr_list=($(cat ${input_csv} | cut -d ',' -f 1 | sed 's/"//g'))
 pos_list=($(cat ${input_csv} | cut -d ',' -f 2 | sed 's/"//g'))
@@ -45,5 +45,6 @@ done
 #echo ${found_lines[@]}
 
 for i in ${found_lines[@]}; do 
+	echo $i
 	echo $i >> ${outpath}
 done
