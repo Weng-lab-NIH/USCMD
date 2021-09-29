@@ -13,4 +13,4 @@ submit*
 .tmp/
 **/*.log
 *.log
-
+./snp*

@@ -26,13 +26,13 @@ for rr in $(seq 1 $all_vals); do
 	chr=${chr_list[$rr]}
 	sc_alt=${sc_alt_list[$rr]}
 
-	echo "looking at $chr $pos with sc_alt $sc_alt"
+	#echo "looking at $chr $pos with sc_alt $sc_alt"
 	grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file
 	if [ $? -eq 0 ]; then
 		let found=found+1
 		my_ref=$(grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file | cut -f 4)
 		SNP=$(grep "${chr}[[:space:]]${pos}[[:space:]]" $vcf_file | cut -f 5)
-		echo "SNP: $SNP sc_alt: $sc_alt"
+		#echo "SNP: $SNP sc_alt: $sc_alt"
 		if [ "$SNP" == "$sc_alt" ]; then
 			my_line=$(echo ${chr},${pos},${my_ref},${SNP},\"${sc_alt}\")
 			found_lines=(${found_lines[@]} $my_line)
@@ -40,8 +40,8 @@ for rr in $(seq 1 $all_vals); do
 	fi
 done
 
-echo '${found_lines[@]}'
-echo ${found_lines[@]}
+#echo '${found_lines[@]}'
+#echo ${found_lines[@]}
 
 for i in ${found_lines[@]}; do 
 	echo $i >> ${outpath}

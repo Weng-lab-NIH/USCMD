@@ -88,7 +88,7 @@ for (i in 1:nrow(donor_df)){
   pre_UMI_num <- nrow(mutect_pass)
 
   umi_pass <- step9_csv %>%
-    filter(umi_fraction_filter == 'pass' | recovered_double==T) %>%
+    filter((reads_in_umi == 'pass' & umi_fraction_filter == 'pass') | recovered_double==T) %>%
     dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   post_UMI_num <- nrow(umi_pass)
 

@@ -29,7 +29,7 @@ for rr in $(seq 1 $all_vals); do
 	sc_alt=${sc_alt_list[$rr]}
 
 
-	echo "looking at $chr $pos with sc_alt $sc_alt"
+	#echo "looking at $chr $pos with sc_alt $sc_alt"
 	grep "\"${chr}\",\"${pos}\",\".\",\"${sc_alt}\"" $double_snp_csv
 	if [ $? -eq 0 ]; then
 		let found=found+1
@@ -37,12 +37,12 @@ for rr in $(seq 1 $all_vals); do
 		SNP=$(grep "\"${chr}\",\"${pos}\",\".\",\"${sc_alt}\"" $double_snp_csv | cut -d, -f 4)
 		my_line=$(echo ${chr},${pos},${ref},${SNP},\"${sc_alt}\")
 		found_lines=(${found_lines[@]} $my_line)
-		echo "$my_line"
+		#echo "$my_line"
 	fi
 done
 
-echo '${found_lines[@]}'
-echo ${found_lines[@]}
+#echo '${found_lines[@]}'
+#echo ${found_lines[@]}
 
 for i in ${found_lines[@]}; do 
 	echo $i >> ${outpath}

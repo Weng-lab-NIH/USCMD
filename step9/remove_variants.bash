@@ -28,10 +28,10 @@ filter_file () {
         chr=${chr_list[$rr]}
         sc_alt=${sc_alt_list[$rr]}
 
-        echo '****'
-        echo "looking at $chr $pos with sc_alt $sc_alt"
+        #echo '****'
+        #echo "looking at $chr $pos with sc_alt $sc_alt"
         grepline="${chr},${pos},.*,\"${sc_alt}\",\"${sc_alt}\""
-        echo $grepline
+        #echo $grepline
         grep $grepline $variants_to_remove_csv
         if [ $? -eq 0 ]; then
             continue
@@ -39,7 +39,7 @@ filter_file () {
         line_num=$((rr + 1))
         sed "${line_num}q;d" $input_csv >> $outpath
         sed "${line_num}q;d" $input_csv 
-        echo '----'
+        #echo '----'
     done
 }
 

@@ -1,11 +1,10 @@
-
+# CROSS SECTIONAL
 version <- '4.6.3'
 
 # Load Libraries
 library(tidyverse)
 library(R.utils)
 library(argparse)
-# source('./parameters')
 
 parser <- ArgumentParser()
 parser$add_argument("sample", help="The name of your sample.")
@@ -46,6 +45,7 @@ if (dir.exists(var_out)==FALSE) dir.create(var_out)
 # Generate Scripts for Variant-Calling
 spl <- split(sample_cells, ceiling(seq_along(sample_cells)/215))
 for (ls in c(1:length(spl))) {
+#for (ls in c(1)){
 write(unlist(spl[ls]), file = paste(tag_dir, '/TL_', sam, '_', ls, sep = ''))
     
 bash <- paste0('#!/bin/bash
@@ -73,7 +73,7 @@ REF_VAR=',snp_out,'
 
 # COPY BAM/REFERENCE FILE TO LOCAL SCRATCH:
 
-mkdir ${DIR_SCRIPT}/.tmp_${TL}
+mkdir ${DIR_SCRIPT}/.tmp_${TL} 
 
 # READ IN TAGS - PIPE INTO GNU PARALLEL :
 #						SPLIT BAM INTO SINGLE CELLS > CALL VARIANTS > FILTER/AGGREGATE VARIANTS to mutations.csv
@@ -116,7 +116,7 @@ cat ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL} \\
 -V ${DIR_SCRIPT}/.tmp_${TL}/${SAMPLE}_{}_var.vcf \\
 -O ${DIR_O}/${SAMPLE}_{}_var_FLTR.vcf \\
 --disable-tool-default-read-filters \\
---min-median-mapping-quality 0
+--min-median-mapping-quality 0 
 
 LEN=$(wc -w < ${DIR_SCRIPT}/TL/TL_${SAMPLE}_${TL})
 
