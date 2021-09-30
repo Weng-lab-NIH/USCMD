@@ -56,14 +56,14 @@ for (i in 1:nrow(donor_df)) {
   # step9_path <- file.path(pipeline_dir, "step9", "filtered_ScoredMutations.csv")
   step9_path <- file.path(pipeline_dir, "step9", "ScoredMutations.csv")
   step9_csv <- read.csv(step9_path, header=T)
-  print("step9_csv")
-  print(dim(step9_csv))
-  print(table(step9_csv$mutect_filter))
+  # print("step9_csv")
+  # print(dim(step9_csv))
+  # print(table(step9_csv$mutect_filter))
   mutect_pass <- step9_csv %>%
     filter(mutect_filter == 'pass')
   pre_UMI_num <- nrow(mutect_pass)
-  print("pre_UMI_num")
-  print(pre_UMI_num)
+  # print("pre_UMI_num")
+  # print(pre_UMI_num)
 
   # umi_pass <- step9_csv %>%
   #   filter(( reads_in_umi_filter == 'pass') | recovered_double==T) %>%
@@ -76,11 +76,11 @@ for (i in 1:nrow(donor_df)) {
   #   dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   post_UMI_num <- nrow(umi_pass)
 
-  print("umi_pass")
-  print(nrow(umi_pass))
-  print(unique(step9_csv$reads_in_umi_filter))
-  print(unique(step9_csv$umi_fraction_filter))
-  print(table(step9_csv$reads_in_umi_filter, step9_csv$umi_fraction_filter))
+  # print("umi_pass")
+  # print(nrow(umi_pass))
+  # print(unique(step9_csv$reads_in_umi_filter))
+  # print(unique(step9_csv$umi_fraction_filter))
+  # print(table(step9_csv$reads_in_umi_filter, step9_csv$umi_fraction_filter))
   if (nrow(umi_pass)==0){
     next
   }
@@ -107,26 +107,27 @@ combined_df <- inner_join(donor_df, constructed_df, by="sample_name")
 all_umi_pass <- bind_rows(all_umi_pass)
 print("all_umi_pass")
 print(dim(all_umi_pass))
+print(head(all_umi_pass))
 # print("all_umi_pass")
 # print(all_umi_pass)
 
-top_genes <- all_umi_pass %>% 
-  count(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, sort = TRUE) %>%
-  filter(!grepl( "-", ENSEMBL_GENE_ID)) %>%
-  filter(!is.na(AA_CHANGE)) %>%  
-  head(n=10L)
-print(top_genes)
+# top_genes <- all_umi_pass %>% 
+#   count(ENSEMBL_GENE_ID, Chr, POS, REF, ALT,AA_CHANGE, sort = TRUE) %>%
+#   filter(!grepl( "-", ENSEMBL_GENE_ID)) %>%
+#   filter(!is.na(AA_CHANGE)) %>%  
+#   head(n=10L)
+# print(top_genes)
 
-top_gene_summary <- bind_rows(lapply(top_genes$ENSEMBL_GENE_ID, ensembl_id_conversion))
-top_gene_summary <- top_gene_summary %>%
-  mutate(num_cells = top_genes$n,
-    Chromosome = top_genes$Chr,
-    Position = top_genes$POS,
-    NT_mutated_from = top_genes$REF,
-    NT_mutated_to = top_genes$ALT,
-    AA_CHANGE = top_genes$AA_CHANGE) %>%
-  rename(gene_description = description,
-    gene_id = external_gene_name)
+# top_gene_summary <- bind_rows(lapply(top_genes$ENSEMBL_GENE_ID, ensembl_id_conversion))
+# top_gene_summary <- top_gene_summary %>%
+#   mutate(num_cells = top_genes$n,
+#     Chromosome = top_genes$Chr,
+#     Position = top_genes$POS,
+#     NT_mutated_from = top_genes$REF,
+#     NT_mutated_to = top_genes$ALT,
+#     AA_CHANGE = top_genes$AA_CHANGE) %>%
+#   rename(gene_description = description,
+#     gene_id = external_gene_name)
 
 fig1e_table <- combined_df %>%
   dplyr::select(sample_name, pre_UMI_num, post_UMI_num)

@@ -27,7 +27,7 @@ echo out_dir: ${out_dir}
 
 # GENERATE MUTATION SCORES:
 echo "filters: ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter}"
-Rscript `dirname "$0"`/step9_ScoreMutations_copy.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter} ${out_dir} `dirname "$0"`/VariantCalling_functions_2_copy.R
+Rscript `dirname "$0"`/step9_ScoreMutations.R ${mutations_list} ${mutations_Reads} ${mutations_Metadata} ${sc_AD_filter} ${sc_DP_filter} ${exome_DP_filter} ${out_dir} `dirname "$0"`/VariantCalling_functions_2.R
 
 # FILTER OUTPUT VARIANTS
 # echo chr,POS,REF,SNP,SC_ALT > ${out_dir}/variants_to_remove.csv

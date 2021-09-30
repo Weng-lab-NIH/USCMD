@@ -1,15 +1,20 @@
 # The following table is formatted as tab separated values. 
-#GeneName	GeneId	TranscriptId	BioType	variants_impact_LOW	variants_impact_MODIFIER	variants_effect_3_prime_UTR_variant	variants_effect_downstream_gene_variant	variants_effect_intron_variant	variants_effect_non_coding_transcript_exon_variant	variants_effect_synonymous_variant	variants_effect_upstream_gene_variant
-AC048337.1	ENSG00000258435	ENST00000557474		0	1	0	1	0	0	0	0
-AC113367.1	ENSG00000244192	ENST00000498453	processed_pseudogene	0	3	0	0	0	3	0	0
-AC113367.3	ENSG00000250405	ENST00000508316	processed_pseudogene	0	3	0	0	0	0	0	3
-AP001324.1	ENSG00000227615	ENST00000428553	processed_pseudogene	0	1	0	0	0	1	0	0
-RN7SL1	ENSG00000276168	ENST00000618786	misc_RNA	0	1	0	0	0	0	0	1
-RNF169	ENSG00000166439	ENST00000299563	protein_coding	0	1	0	0	0	0	0	1
-RNF34	ENSG00000170633	ENST00000392464	protein_coding	0	1	0	0	1	0	0	0
-RPL13P12	ENSG00000215030	ENST00000392730	processed_pseudogene	0	1	0	1	0	0	0	0
-RPS29	ENSG00000213741	ENST00000554075	protein_coding	1	0	0	0	0	0	1	0
-SERINC5	ENSG00000164300	ENST00000507668	protein_coding	0	1	0	0	1	0	0	0
-STRAP	ENSG00000023734	ENST00000025399	protein_coding	0	3	0	0	3	0	0	0
-STYX	ENSG00000198252	ENST00000354586	protein_coding	0	1	0	0	1	0	0	0
-TPGS1	ENSG00000141933	ENST00000359315	protein_coding	0	3	3	0	0	0	0	0
+#GeneName	GeneId	TranscriptId	BioType	variants_impact_LOW	variants_impact_MODIFIER	variants_effect_downstream_gene_variant	variants_effect_intron_variant	variants_effect_non_coding_transcript_exon_variant	variants_effect_synonymous_variant	variants_effect_upstream_gene_variant
+AC024293.1	ENSG00000244313	ENST00000467930	processed_pseudogene	0	1	1	0	0	0	0
+AC091390.4	ENSG00000239486	ENST00000426478	unprocessed_pseudogene	0	1	0	0	1	0	0
+AC091390.5	ENSG00000239969	ENST00000492837	processed_transcript	0	1	0	0	1	0	0
+AC243829.1	ENSG00000274767	ENST00000615128		0	2	0	2	0	0	0
+AC245150.1	ENSG00000277127	ENST00000576563	misc_RNA	0	1	0	0	0	0	1
+AL450405.1	ENSG00000230202	ENST00000443998	processed_pseudogene	0	2	0	0	2	0	0
+AMBRA1	ENSG00000110497	ENST00000458649	protein_coding	0	1	0	1	0	0	0
+DNAJC13	ENSG00000138246	ENST00000260818	protein_coding	0	1	0	1	0	0	0
+EEF1DP1	ENSG00000228887	ENST00000585891	processed_pseudogene	0	3	3	0	0	0	0
+FNBP4	ENSG00000109920	ENST00000263773	protein_coding	0	1	0	1	0	0	0
+LLGL2	ENSG00000073350	ENST00000392550	protein_coding	0	1	0	1	0	0	0
+MIR1199	ENSG00000284081	ENST00000621445	miRNA	0	3	0	0	0	0	3
+MISP3	ENSG00000141854	ENST00000269720	protein_coding	0	3	0	0	0	0	3
+RCC1L	ENSG00000274523	ENST00000610322	protein_coding	0	1	0	1	0	0	0
+RNMT	ENSG00000101654	ENST00000592764	protein_coding	0	1	0	1	0	0	0
+SLC35F1	ENSG00000196376	ENST00000360388	protein_coding	0	2	0	2	0	0	0
+TMSB10	ENSG00000034510	ENST00000233143	protein_coding	1	0	0	0	0	1	0
+ZNF77	ENSG00000175691	ENST00000314531	protein_coding	0	2	0	2	0	0	0
