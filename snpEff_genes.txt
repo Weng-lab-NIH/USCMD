@@ -1,20 +1,9 @@
 # The following table is formatted as tab separated values. 
-#GeneName	GeneId	TranscriptId	BioType	variants_impact_LOW	variants_impact_MODIFIER	variants_effect_downstream_gene_variant	variants_effect_intron_variant	variants_effect_non_coding_transcript_exon_variant	variants_effect_synonymous_variant	variants_effect_upstream_gene_variant
-AC024293.1	ENSG00000244313	ENST00000467930	processed_pseudogene	0	1	1	0	0	0	0
-AC091390.4	ENSG00000239486	ENST00000426478	unprocessed_pseudogene	0	1	0	0	1	0	0
-AC091390.5	ENSG00000239969	ENST00000492837	processed_transcript	0	1	0	0	1	0	0
-AC243829.1	ENSG00000274767	ENST00000615128		0	2	0	2	0	0	0
-AC245150.1	ENSG00000277127	ENST00000576563	misc_RNA	0	1	0	0	0	0	1
-AL450405.1	ENSG00000230202	ENST00000443998	processed_pseudogene	0	2	0	0	2	0	0
-AMBRA1	ENSG00000110497	ENST00000458649	protein_coding	0	1	0	1	0	0	0
-DNAJC13	ENSG00000138246	ENST00000260818	protein_coding	0	1	0	1	0	0	0
-EEF1DP1	ENSG00000228887	ENST00000585891	processed_pseudogene	0	3	3	0	0	0	0
-FNBP4	ENSG00000109920	ENST00000263773	protein_coding	0	1	0	1	0	0	0
-LLGL2	ENSG00000073350	ENST00000392550	protein_coding	0	1	0	1	0	0	0
-MIR1199	ENSG00000284081	ENST00000621445	miRNA	0	3	0	0	0	0	3
-MISP3	ENSG00000141854	ENST00000269720	protein_coding	0	3	0	0	0	0	3
-RCC1L	ENSG00000274523	ENST00000610322	protein_coding	0	1	0	1	0	0	0
-RNMT	ENSG00000101654	ENST00000592764	protein_coding	0	1	0	1	0	0	0
-SLC35F1	ENSG00000196376	ENST00000360388	protein_coding	0	2	0	2	0	0	0
-TMSB10	ENSG00000034510	ENST00000233143	protein_coding	1	0	0	0	0	1	0
-ZNF77	ENSG00000175691	ENST00000314531	protein_coding	0	2	0	2	0	0	0
+#GeneName	GeneId	TranscriptId	BioType	variants_impact_HIGH	variants_impact_MODIFIER	variants_effect_downstream_gene_variant	variants_effect_frameshift_variant	variants_effect_intron_variant	variants_effect_non_coding_transcript_exon_variant	variants_effect_upstream_gene_variant
+AC096638.2	ENSG00000229016	ENST00000434965	processed_pseudogene	0	1	0	0	0	0	1
+AL136454.1	ENSG00000231767	ENST00000647225	protein_coding	0	3	3	0	0	0	0
+AL450405.1	ENSG00000230202	ENST00000443998	processed_pseudogene	0	2	0	0	0	2	0
+MIR4426	ENSG00000283795	ENST00000640330	miRNA	0	3	3	0	0	0	0
+PDE4D	ENSG00000113448	ENST00000340635	protein_coding	0	2	0	0	2	0	0
+RRP15	ENSG00000067533	ENST00000366932	protein_coding	1	0	0	1	0	0	0
+SLC35F1	ENSG00000196376	ENST00000360388	protein_coding	0	2	0	0	2	0	0

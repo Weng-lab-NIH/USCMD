@@ -89,24 +89,39 @@ for (i in 1:length(sample_cells)) {
 # can easily work with them
 # TURN THE MASTER VCF DATAFRAME INTO A DATAFRAME
 
-suppressWarnings({
+print("master.annotate line 92")
+print(master.annotate)
+print("after master.annotate line 92")
+
 listcl <- master.annotate %>%
-  separate(8,c('CONTQ','DP','ECNT','GERMQ','MBQ','MFRL','MMQ','MPOS','NALOD','NLOD','POPAF','SAAF','SAP','TLOD','ANN'),sep=';') %>%
-  separate(22, as.character(seq(1,15,1)), sep='\\|') %>%
+  separate(8,c('AS_FilterStatus','AS_SB_TABLE','DP','ECNT','GERMQ','MBQ',
+    'MFRL','MMQ','MPOS','NALOD', 'NLOD','POPAF','TLOD','ANN'),
+  sep=';') %>%
+  separate('ANN', as.character(seq(1,15,1)), sep='\\|') %>%
   separate(V10, 
     c('sc_GT', 'sc_AD', 'sc_AF', 'sc_DP', 'sc_F1R2', 'sc_F2R1'), 
     sep=':'
     )
-})
+print("listcl99")
+print(listcl)
+print("after listcl99")
+
 colnames(listcl) <- c('Chr','POS','ID','REF','ALT','QUAL','FILTER',
-                       'CONTQ','DP','ECNT','GERMQ','MBQ','MFRL','MMQ','MPOS','NALOD','NLOD','POPAF','SAAF','SAP','TLOD','ANN',
-                       'VAR_TYPE','MOD','GENE','ENSEMBL_GENE_ID','READ_TYPE','ENST_ID','FUNCTION','ratio','NUC_CHANGE','AA_CHANGE',
-                       'ratio1','ratio2','ratio3','number','stat1','sc_GT', 'sc_AD', 'sc_AF', 'sc_DP', 'sc_F1R2', 'sc_F2R1','stat3','donor','bc')
+                       'AS_FilterStatus','AS_SB_TABLE','DP','ECNT','GERMQ',
+                       'MBQ','MFRL','MMQ','MPOS','NALOD','NLOD','POPAF',
+                       'TLOD','ANN', 'VAR_TYPE','MOD','GENE',
+                       'ENSEMBL_GENE_ID','READ_TYPE','ENST_ID','FUNCTION',
+                       'ratio','NUC_CHANGE','AA_CHANGE', 'ratio1','ratio2',
+                       'ratio3', 'distance','stat1','sc_GT', 'sc_AD', 'sc_AF', 
+                       'sc_DP', 'sc_F1R2', 'sc_F2R1','stat3','donor','bc')
 listcl <- listcl %>% mutate(REF = as.character(REF), ALT = as.character(ALT),
-  CONTQ = parse_number(CONTQ), DP = parse_number(DP), ECNT = parse_number(ECNT), GERMQ = sub(".*=", "", GERMQ),
-  MBQ = sub(".*=", "", MBQ), MFRL = sub(".*=", "", MFRL), MMQ = sub(".*=", "", MMQ), MPOS = parse_number(MPOS), 
-  NALOD = parse_number(NALOD), NLOD = parse_number(NLOD), POPAF = parse_number(POPAF), SAAF = sub(".*=", "", SAAF), 
-  SAP = sub(".*=", "", SAP), TLOD = parse_number(TLOD), ANN = sub(".*=", "", ANN))
+  DP = parse_number(DP), 
+  ECNT = parse_number(ECNT), GERMQ = sub(".*=", "", GERMQ),
+  MBQ = sub(".*=", "", MBQ), MFRL = sub(".*=", "", MFRL), 
+  MMQ = sub(".*=", "", MMQ), MPOS = parse_number(MPOS), 
+  NALOD = parse_number(NALOD), NLOD = parse_number(NLOD), 
+  POPAF = parse_number(POPAF), TLOD = parse_number(TLOD), 
+  ANN = sub(".*=", "", ANN))
 
 # FILTER TO ONLY CONTAIN SNVs, INCLUDING MULTIALLELIC SNVs
 pre_filter_num_mut <- nrow(listcl)
@@ -117,7 +132,10 @@ listcl <- listcl %>% mutate(ref_len = nchar(REF), alt_len = nchar(ALT)) %>%
   )
 post_filter_num_mut <- nrow(listcl)
 
+print("listcl122")
 print(listcl)
+print("after listcl122")
+
 
 # PUT EACH ALLELE OF A MULTIALLELIC SNV ON ITS OWN LINE
 listcl_parsed <- apply(listcl, 1, parse_single_cell_metrics) %>% 
