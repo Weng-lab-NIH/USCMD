@@ -5,6 +5,7 @@ Sample=${Sample:default_Cell_num}
 DataDirectory=${DataDirectory:default_data_dir}
 Targets=${Targets:default_targets}
 Outdir=${Outdir:default_outdir}
+NumCores=${NumCores:default_numcores}
 
 while [ $# -gt 0 ]; do            
     if [[ $1 == *"--"* ]]; then

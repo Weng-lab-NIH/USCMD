@@ -130,8 +130,9 @@ print(head(all_umi_pass))
 #     gene_id = external_gene_name)
 
 fig1e_table <- combined_df %>%
-  dplyr::select(sample_name, pre_UMI_num, post_UMI_num)
+  dplyr::select(sample_name, pre_UMI_num, post_UMI_num, false_neg_num)
 write.csv(fig1e_table, "fig1e_table.csv", row.names=F)
+
 
 ## app.R ##
 ui <- dashboardPage(
