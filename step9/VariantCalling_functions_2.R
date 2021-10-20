@@ -160,6 +160,12 @@ score.mutations <- function(mutations, point, read,
     mutations.filtered <- rbind(mutations.filtered, double.mutations)
     print("recovered double mutations added")
 
+    ## Remove positions with more than 2 variants.
+    ## Added by Humza Hemani
+    mutations.filtered <- group_by(mutations.filtered, bc,Chr,POS) %>%
+      mutate(num_variant = length(unique(ALT))) %>%
+      mutate(num_variant_filter = ifelse(num_variant<=2, 'pass', 'fail'))
+
     return(mutations.filtered)
   }
 
