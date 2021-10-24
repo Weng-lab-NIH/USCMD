@@ -1,4 +1,0 @@
-# The following table is formatted as tab separated values. 
-#GeneName	GeneId	TranscriptId	BioType	variants_impact_MODERATE	variants_impact_MODIFIER	variants_effect_downstream_gene_variant	variants_effect_missense_variant
-AC026369.1	ENSG00000249695	ENST00000508953		0	1	1	0
-IQSEC3	ENSG00000120645	ENST00000538872	protein_coding	1	0	0	1
