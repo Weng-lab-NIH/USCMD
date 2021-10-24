@@ -1,2 +1,0 @@
-filter_name	threshold	expected_fps	expected_fpr	requested_fpr	num_passing_variants
-read_orientation_artifact	1.0	0.0	NaN	0.05	0
