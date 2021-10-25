@@ -88,7 +88,11 @@ for (i in 1:nrow(donor_df)){
   pre_UMI_num <- nrow(mutect_pass)
 
   umi_pass <- step9_csv %>%
-    filter((reads_in_umi == 'pass' & umi_fraction_filter == 'pass') | recovered_double==T) %>%
+    filter(
+      (reads_in_umi == 'pass' & 
+      umi_fraction_filter == 'pass' & 
+      num_variant_filter == 'pass') | 
+    recovered_double==T) %>%
     dplyr::select(ENSEMBL_GENE_ID, Chr, POS, REF, ALT, AA_CHANGE, bc) 
   post_UMI_num <- nrow(umi_pass)
 
@@ -107,12 +111,12 @@ for (i in 1:nrow(donor_df)){
   # false negatives are just all the ones that has.two.variant
   #normalized counts
   num_mut_per_cell <- umi_pass %>% 
-    group_by(bc) %>% tally()
+    group_by(sample, bc) %>% tally()
   # print("num_mut_per_cell")
   # print(num_mut_per_cell)
   num_mut_per_cell$log2_mut <- log2(num_mut_per_cell$n + 1)
   new_data_per_cell <- full_join(num_mut_per_cell, step11_csv, 
-    by = c('bc'='Sample')) %>%
+    by = c('bc', 'sample')) %>%
     replace_na(list("n"=1, "log2_mut"=0))
   new_data_per_cell$sample <- sample_name
   
