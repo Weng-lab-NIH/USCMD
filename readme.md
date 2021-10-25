@@ -1,5 +1,5 @@
 ### Installing the Pipeline
-You will need to create singularity images for each step. In each step's folder, there is a file named step\<number\>.def, which is a singularity definition file. You can use this file to create that step's singularity file by running the corresponding script named build_step\<number\>.bash. This script uses sylab's remote container building service, so you'll have to set up an account for that [here](https://cloud.sylabs.io/builder). Of course, you can build the container locally on your own machine if you have sudo permissions on it.
+You will need to create singularity images for each step. In each step's folder, there is a file named `step\<number\>.def`, which is a singularity definition file. You can use this file to create that step's singularity file by running the corresponding script named `build_step\<number\>.bash`. This script uses sylab's remote container building service, so you'll have to set up an account for that [here](https://cloud.sylabs.io/builder). Of course, you can build the container locally on your own machine if you have sudo permissions on it.
 
 ### Running the Pipeline
 To run USCMD, you will need the following data:
@@ -33,6 +33,8 @@ run_pipeline.bash \
 | r2_filename | the name of the R2 file within exome_dir |
 | cellranger_bam | possorted.bam output from cellranger |
 | pipeline_dir | an empty directory to write output to |
+
+Please note `run_pipeline.bash` assumes each step's container is contained in a folder named `pipeline_containers`.
 
 We developed a dashboard to allow data visualization. To display this dashboard, you will need to input an HTTP port. By default, this is 80 on most systems. You will also need to input a CSV file with columns for sample_name, sex, age, and pipeline_dir. Here's an example of how to run the dashboard:
 
