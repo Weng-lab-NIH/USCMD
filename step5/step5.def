@@ -8,7 +8,7 @@ From: ubuntu:latest
     version 1
 
 %environment
-    export PATH="$PATH:/gatk-4.1.0.0"
+    export PATH="$PATH:/gatk-4.1.9.0"
     export PATH="$PATH:/TrimGalore-0.6.6"
     export LC_ALL="en_US.UTF-8"
     export LC_CTYPE="en_US.UTF-8"
@@ -76,8 +76,8 @@ From: ubuntu:latest
 
 
     #gatk
-    wget -P / https://github.com/broadinstitute/gatk/releases/download/4.1.0.0/gatk-4.1.0.0.zip
-    unzip gatk-4.1.0.0
+    wget -P / https://github.com/broadinstitute/gatk/releases/download/4.1.9.0/gatk-4.1.9.0.zip
+    unzip gatk-4.1.9.0
     cd /
 
     #trim_galore
@@ -91,7 +91,7 @@ From: ubuntu:latest
     wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step5/step5.bash
 
 %test
-    export PATH="$PATH:/gatk-4.1.0.0"
+    export PATH="$PATH:/gatk-4.1.9.0"
     export PATH="$PATH:/TrimGalore-0.6.6"
     grep -q NAME=\"Ubuntu\" /etc/os-release
 
