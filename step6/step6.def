@@ -6,7 +6,7 @@ From: ubuntu:latest
     version 1
 
 %environment
-    export PATH="$PATH:/gatk-4.1.0.0"
+    export PATH="$PATH:/gatk-4.1.9.0"
     export LC_ALL="en_US.UTF-8"
     export LC_CTYPE="en_US.UTF-8"
 
@@ -84,13 +84,13 @@ From: ubuntu:latest
 
 
     #gatk
-    wget -P / https://github.com/broadinstitute/gatk/releases/download/4.1.0.0/gatk-4.1.0.0.zip
-    unzip gatk-4.1.0.0
+    wget -P / https://github.com/broadinstitute/gatk/releases/download/4.1.9.0/gatk-4.1.9.0.zip
+    unzip gatk-4.1.9.0
     cd /
 
 
 %test
-    export PATH="$PATH:/gatk-4.1.0.0"
+    export PATH="$PATH:/gatk-4.1.9.0"
     grep -q NAME=\"Ubuntu\" /etc/os-release
 
     if [ $? -eq 0 ]; then
