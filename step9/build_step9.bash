@@ -7,6 +7,6 @@
 
 unset SINGULARITY_BINDPATH
 
-module load singularity/3.8.0 
+#module load singularity/3.8.0 
 rm -f step9.sif
 singularity build --remote step9.sif definition_step9_ScoreMutations.def
