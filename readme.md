@@ -1,5 +1,5 @@
 ### Installing the Pipeline
-TODO: figure out how exactly this will work.
+You will need to create singularity images for each step. First, install singularity, and then go into each step's folder and run build_step<number>.bash.
 
 ### Running the Pipeline
 To run USCMD, you will need the following data:
@@ -10,7 +10,7 @@ To run USCMD, you will need the following data:
 
 The following is an example call to the pipeline on synthetic donor SYN_M1:
 ```
-test_stitched_artificial_data_v2.bash \
+run_pipeline.bash \
     --sample SYN_M1 \
     --barcode_list ./syn_data/sc_reads_v2/SYN_M1/used_barcodes.txt \
     --num_cores 2 \
@@ -57,8 +57,5 @@ This is followed by (7) Reformat Annotated Variants in which the read informatio
 
 (10) Summarize Donor Exome and Mutations (10a) and Summarize Single-Cell Stats (10b) iterates through the donor inputs to the pipeline and outputs the exome depth, sequencing coverage, and sequencing reads for all the donors to a single CSV file, which can be used to adjust for differences in sequencing depth and exome coverage among the donors.
 
-Finally, a dashboard was developed to allow data visualization
-
-### Stepwise explanation:
-TODO:Is this really needed though?
+Finally, a dashboard was developed to allow data visualization. To display this dashboard, you will need to input an HTTP port. By default, this is 80 on most systems.
 
