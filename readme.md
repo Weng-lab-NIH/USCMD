@@ -34,6 +34,15 @@ run_pipeline.bash \
 | cellranger_bam | possorted.bam output from cellranger |
 | pipeline_dir | an empty directory to write output to |
 
+We developed a dashboard to allow data visualization. To display this dashboard, you will need to input an HTTP port. By default, this is 80 on most systems. You will also need to input a CSV file with columns for sample_name, sex, age, and pipeline_dir. Here's an example of how to run the dashboard:
+
+```
+Rscript ./USCMD\ Dashboards.R \
+  --donor_list_csv ./synthetic_donor_list.csv \
+  --port $PORT1 \
+```
+
+synthetic_donor_list.csv is in the dashboard folder of this repo.
 
 ### How it works (overview):
 This method was implemented in ten steps:
@@ -56,6 +65,3 @@ This is followed by (7) Reformat Annotated Variants in which the read informatio
 (9) Score Mutations for single cells takes in these TSV files and scores the mutations based on multiple quality control metrics and outputs these scores as a CSV file. 
 
 (10) Summarize Donor Exome and Mutations (10a) and Summarize Single-Cell Stats (10b) iterates through the donor inputs to the pipeline and outputs the exome depth, sequencing coverage, and sequencing reads for all the donors to a single CSV file, which can be used to adjust for differences in sequencing depth and exome coverage among the donors.
-
-Finally, a dashboard was developed to allow data visualization. To display this dashboard, you will need to input an HTTP port. By default, this is 80 on most systems.
-
