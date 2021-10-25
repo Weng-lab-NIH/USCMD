@@ -1,0 +1,5 @@
+donor_id,exome_ref_line,position,set_nucleotide_to,allele_idx
+SYN_M1,0,317812,G,1
+SYN_M1,0,317812,T,2
+SYN_M1,0,310232,G,2
+SYN_M1,0,310232,G,1

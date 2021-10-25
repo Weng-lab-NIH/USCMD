@@ -1,0 +1,13 @@
+donor_id,cell_id,area_of_interest_id,exome_ref_line,position_of_interest,UMI_id,read_set_id,set_nucleotide_to,num_reads
+SYN_F1,1,1,0,125750,1,1,A,30
+SYN_F1,1,1,0,125750,1,2,T,10
+SYN_F1,1,1,0,125750,2,1,A,30
+SYN_F1,1,1,0,125750,2,2,A,10
+SYN_F1,1,1,0,125750,3,1,A,30
+SYN_F1,1,1,0,125750,3,2,A,10
+SYN_F1,2,1,0,307550,1,1,A,30
+SYN_F1,2,1,0,307550,1,2,C,20
+SYN_F1,2,1,0,307550,2,1,C,3
+SYN_F1,3,1,0,307600,1,1,A,2
+SYN_F1,3,1,0,307600,1,2,C,2
+SYN_F1,3,1,0,307600,2,1,A,2
