@@ -1,0 +1,6 @@
+sample_name,sex,age,pipeline_dir
+SYN_M1,M,70,pipeline_output/SYN_M1
+SYN_M2,M,30,pipeline_output/SYN_M2
+SYN_F1,M,70,pipeline_output/SYN_F1
+SYN_F2,M,30,pipeline_output/SYN_F2
+SYN_M4,M,45,pipeline_output/SYN_M4
