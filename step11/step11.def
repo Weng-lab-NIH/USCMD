@@ -20,11 +20,13 @@ From: ubuntu:latest
     apt-get -y -q install curl
     apt-get -y -q install python-is-python3
     apt-get -y -q install dos2unix
+    apt-get -y -q install parallel
 
     #samtools dependecies
     apt-get -y -q install autoconf automake make gcc perl zlib1g-dev libbz2-dev liblzma-dev libcurl4-gnutls-dev libssl-dev libncurses5-dev
     #samtools
     wget -P / https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2
+    wget -P / https://raw.githubusercontent.com/Weng-lab-NIH/USCMD/main/step10/targets_chr.bed
     tar -vxjf samtools-1.11.tar.bz2
     cd samtools-1.11
     ./configure
