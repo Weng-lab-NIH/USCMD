@@ -39,7 +39,7 @@ We developed a dashboard to allow data visualization. To display this dashboard,
 ```
 Rscript ./USCMD\ Dashboards.R \
   --donor_list_csv ./synthetic_donor_list.csv \
-  --port $PORT1 \
+  --port 80 \
 ```
 
 synthetic_donor_list.csv is in the dashboard folder of this repo.
