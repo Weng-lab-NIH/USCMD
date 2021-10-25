@@ -1,6 +1,6 @@
 */test_out/
 **/*.sif
-**/*.csv
+**/[!s]*.csv
 **/*.out
 **/test*
 test*
