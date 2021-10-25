@@ -1,5 +1,5 @@
 ### Installing the Pipeline
-You will need to create singularity images for each step. First, install singularity, and then go into each step's folder and run build_step\<number\>.bash.
+You will need to create singularity images for each step. In each step's folder, there is a file named step\<number\>.def, which is a singularity definition file. You can use this file to create that step's singularity file by running the corresponding script named build_step\<number\>.bash. This script uses sylab's remote container building service, so you'll have to set up an account for that [here](https://cloud.sylabs.io/builder). Of course, you can build the container locally on your own machine if you have sudo permissions on it.
 
 ### Running the Pipeline
 To run USCMD, you will need the following data:
