@@ -1,5 +1,5 @@
 ### Installing the Pipeline
-You will need to create singularity images for each step. First, install singularity, and then go into each step's folder and run build_step<number>.bash.
+You will need to create singularity images for each step. First, install singularity, and then go into each step's folder and run build_step\<number\>.bash.
 
 ### Running the Pipeline
 To run USCMD, you will need the following data:
