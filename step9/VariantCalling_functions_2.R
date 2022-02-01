@@ -70,13 +70,13 @@ score.mutations <- function(mutations, point, read,
     
     mutations.filtered <- mutations
     
-    print("mutations")
-    print(head(mutations$DP))
-    print(exome_DP_filter)
-    print(head(mutations$sc_AD))
-    print(sc_AD_filter)
-    print(head(mutations$sc_DP))
-    print(sc_DP_filter)
+    # print("mutations")
+    # print(head(mutations$DP))
+    # print(exome_DP_filter)
+    # print(head(mutations$sc_AD))
+    # print(sc_AD_filter)
+    # print(head(mutations$sc_DP))
+    # print(sc_DP_filter)
     # Filter mutations for candidates for correction:
     filter.mutect <- mutations %>%
       #mutate(mutect_filter = ifelse(TLOD >= 5.3 & DP > 10 & ECNT > 1, 'pass', 'fail')) %>%
@@ -98,8 +98,8 @@ score.mutations <- function(mutations, point, read,
     colnames(point) <- c('read','zero','flag','Chr','p','ALT','qual','POS','i','j')
     point <- point %>% filter(ALT != '.')
     
-    print("colnames(read")
-    print(colnames(read))
+    # print("colnames(read")
+    # print(colnames(read))
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)
@@ -132,15 +132,15 @@ score.mutations <- function(mutations, point, read,
     read.umi.fraction.filter <- filter.reads.in.umi %>% 
       ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads.filter, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT) %>%
-      summarise(num = n(), verbose = F) %>%
+      summarise(num_umi = n(), verbose = F) %>%
       group_by(bc,Chr,POS,umi) 
     read.umi.fraction.filter <- read.umi.fraction.filter %>%
-      mutate(umi_fraction = num / sum(num)) %>% # Fraction of each base in UMI
+      mutate(umi_fraction = num_umi / sum(num_umi)) %>% # Fraction of each base in UMI
       mutate(umi_fraction_filter = ifelse(umi_fraction > 0.5, 'pass', 'fail')) %>% # Keep bases with more than 50% reads in UMI
       filter(umi_fraction_filter == 'pass') %>%
       ungroup() 
     joining.umi.fraction.filter <- read.umi.fraction.filter %>%
-      dplyr::select(bc,Chr,POS,umi_fraction_filter) %>%
+      dplyr::select(bc,Chr,POS,umi_fraction_filter, num_umi, umi_fraction) %>%
       distinct()
     mutations.filtered <- mutations.filtered %>% left_join(joining.umi.fraction.filter, by = c('bc','Chr','POS'))
     
@@ -185,8 +185,8 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     colnames(point) <- c('read','zero','flag','Chr','p','ALT','qual','POS','i','j')
     point <- point %>% filter(ALT != '.')
     
-    print("colnames(read")
-    print(colnames(read))
+    # print("colnames(read")
+    # print(colnames(read))
     read <- read %>% separate(X1, into = c('read','bc','umi'), sep = '___') %>% 
       mutate(bc = substr(bc,6,24), umi = substr(umi,6,16)) %>%
       distinct() %>% filter(str_length(umi) == 10) %>% dplyr::select(read, bc, umi)
@@ -223,14 +223,14 @@ get.unfiltered.doubles <- function(mutations, point, read) {
     read.umi.fraction.filter <- filter.reads.in.umi %>% 
       ungroup() %>% distinct() %>% dplyr::select(bc,umi) %>% inner_join(point.reads, by = c('bc','umi')) %>%
       group_by(bc,Chr,POS,umi,ALT.sc) %>%
-      summarise(num = n(), verbose = F) %>%
+      summarise(num_umi = n(), verbose = F) %>%
       group_by(bc,Chr,POS,umi) %>%
-      mutate(umi_fraction = num / sum(num)) %>% # Fraction of each base in UMI
+      mutate(umi_fraction = num_umi / sum(num_umi)) %>% # Fraction of each base in UMI
       mutate(umi_fraction_filter = ifelse(umi_fraction > 0.5, 'pass', 'fail')) %>% # Keep bases with more than 50% reads in UMI
       filter(umi_fraction_filter == 'pass') %>%
       ungroup() 
     joining.umi.fraction.filter <- read.umi.fraction.filter %>%
-      dplyr::select(bc,Chr,POS,ALT.sc,umi_fraction_filter) %>%
+      dplyr::select(bc,Chr,POS,ALT.sc,umi_fraction_filter, num_umi, umi_fraction) %>%
       distinct()
     mutations <- mutations %>% left_join(joining.umi.fraction.filter, by = c('bc','Chr','POS'))
     
@@ -290,7 +290,7 @@ replace_low_qual_bases <- function(path, Q_threshold, n_cores) {
       
       
       locations <- str_locate_all(reads[[j]]$qual[[i]], regex)[[1]][,1]
-      print(locations)
+      # print(locations)
       len <- length(locations)
       positions[[as.character(i)]] <- locations
     
