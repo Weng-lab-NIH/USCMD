@@ -1,6 +1,15 @@
 ### Installing the Pipeline
 You will need to create singularity images for each step. In each step's folder, there is a file named `step<number>.def`, which is a singularity definition file. You can use this file to create that step's singularity file by running the corresponding script named `build_step<number>.bash`. This script uses sylab's remote container building service, so you'll have to set up an account for that [here](https://cloud.sylabs.io/builder). Of course, you can build the container locally on your own machine if you have sudo permissions on it.
 
+### Generating Synthetic Data
+We have provided the metadata files and scripts needed to generate the synthetic reads data we used to test this pipeline in `syn_pipeline`. To generate this data yourself, you will need to have samtools and bwa installed. Then, compile `_2.0.0_generate_exome_reads_v2.cpp`. You should then be able to run `run_syn_data_pipeline_csv_input.bash` to get the exome reads files and possorted bam file needed to run the actual mutation calling pipeline. 
+
+To generate your own synthetic donor, add three files to the `syn_pipeline/donor_metadata_csv` folder, named `<donor>_single_cell.csv`, `<donor>_SNPs.csv`, and `<donor>_single_cell.csv`. The donor_info file just contains age and sex info on the donor. The SNPs file specifies which chromosome and position SNPs should be itnroduced at. Note that the subsetted reference we used only has a single chromosome, so the chromosome ID is always 0. 
+
+The single_cell file is the most complicated. For each donor, we generate multiple cells, each with their own cell id. Each cell has multiple areas_of_interest,  each with their own corresponding ID, chromosome number and position. At each area_of_interest we can have several UMIs (with their own ids). Each UMI can have multiple read_sets (again, each read set has its own ID). Each read_set has the same nucleotide specified for at the position we set for the area_of_interest. We can specify the number of reads generated for each read set.
+
+**Please note the donor_id column must correspond with the names of the csv files.**
+
 ### Running the Pipeline
 To run USCMD, you will need the following data:
 - a reference human exome file (fasta format)
