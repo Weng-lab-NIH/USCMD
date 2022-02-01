@@ -25,6 +25,7 @@ echo $metadata_file $art_exome_dir
   $art_exome_dir
 
 echo "STEP2"
+g++ -o _2.0.0_generate_exome_reads_v2 _2.0.0_generate_exome_reads_v2.cpp
 echo ${donor_id} ${art_exome_dir}/${donor_id}.fasta ${exome_read_dir}
 ./_2.0.0_generate_exome_reads_v2 ${donor_id} \
     ${art_exome_dir}/${donor_id}_allele_1.fasta \
