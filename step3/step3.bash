@@ -31,10 +31,14 @@ samtools faidx ${ref_file} -o ${ref_file}.fai
 
 dictionary_path="$(dirname -- "$ref_file")/$(basename -- "$ref_file" .fa).dict"
 echo "**************************"
-if [ ! -e "${dictionary_path}" ]
-then
-    gatk --java-options "-Xmx1G" CreateSequenceDictionary -R ${ref_file} -O ${dictionary_path}
-fi
+# if [ ! -e "${dictionary_path}" ]
+# then
+#     echo "running CreateSequenceDictionary"
+#     gatk --java-options "-Xmx1G" CreateSequenceDictionary -R ${ref_file} -O ${dictionary_path}
+# fi
+rm -f ${dictionary_path}
+echo "dictionary going to ${dictionary_path}"
+gatk --java-options "-Xmx1G" CreateSequenceDictionary -R ${ref_file} -O ${dictionary_path}
 
 rm -f ${out}/${sample}_SM_bwa_RawSNPs.vcf
 gatk --java-options "-Xmx1G" HaplotypeCaller -R ${ref_file} -I ${data}/${sample}_SM_bwa.bam -O ${out}/${sample}_SM_bwa_RawSNPs.vcf
