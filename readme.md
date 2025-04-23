@@ -10,6 +10,7 @@ To run USCMD, you will need the following data:
 
 ### How it works (overview):
 This method was implemented in ten steps:
+
 (1) Align and Index Exome carries out the alignment of individual exome sequencing reads to the human reference genome to create a donor exome bam file. 
 
 (2) Filter Single Cell Data: split the combined scRNAseq data output by the CellRanger pipeline (named possorted_genome_bam.bam in the CellRanger output folder) into separate files for each of the individual cells.  
