@@ -35,36 +35,43 @@ This method was implemented in ten steps:
 
 #### Step 1
 Usage:
-```bash ./step1.bash \
+```
+bash ./step1.bash \
   --sample <sample_name> \
   --exome_dir ./directory/containing/fastqs \
   --aligned_dir ./output/directory_1 \
   --ref_file ./path/to/reference/fasta.fa \
   --num_cores <int> \
   --r1_filename r1.fq.gz \
-  --r2_filename r1.fq.gz```
+  --r2_filename r1.fq.gz
+```
 
 #### Step 2
 Usage:
-```bash ./step2.bash \
+```
+bash ./step2.bash \
   --sample <sample_name> \
   --barcode_list ./list/of/barcodes.txt \
   --bigbam ./path/to/cellranger/possorted.bam \
   --out ./output/directory_2 \
-  --num_cores 1```
+  --num_cores 1
+```
 
 #### Step 4
 NOTE: this step does not create a new output directory, it just adds file to the step 3 output directory.
 Usage:
-```bash ./step4.bash \
+```
+bash ./step4.bash \
   --sample <sample_name> \
   --step3_out ./output/directory_3 \
-  --ref_file ./path/to/reference/fasta.fa```
+  --ref_file ./path/to/reference/fasta.fa
+```
 
 #### Step 5
-NOTE: this step does not create a new output directory, it just adds file to the step 3 output directory.
+NOTE: bc_list is used to run only a limited number of cells from the sample at a time to keep from going over RAM limits. This is the most resource intensive step.
 Usage:
-```bash step5.bash \
+```
+bash step5.bash \
    --sample <sample_name> \
    --step2_out ./output/directory_2 \
    --bc_list ./list/of/barcodes.txt \
@@ -72,4 +79,58 @@ Usage:
    --ref_fasta ./path/to/reference/fasta.fa \
    --ref_bam ./output/bam/from_step4.bam \
    --possorted_read_group <sample_name>_combined \ # be sure to remember to add "combined"!
-   --num_core <int>```
+   --num_core <int>
+```
+
+#### Step 6
+Usage:
+```
+bash step6.bash \
+    --sample <sample_name> \
+    --step5_dir  ./output/directory_5  \
+    --out_dir ./output/directory_6
+```
+
+#### Step 7
+Usage:
+```
+bash ./step7.bash \
+	 --sample <sample_name>     \
+	 --scBAM_dir  ./output/directory_2   \
+	 --mutations_csv  ./output/directory_6/mutations_<sample>.csv     \
+	 --out_dir   ./output/directory_7    \
+	 --num_cores <int> 
+```
+
+#### Step 8
+Usage:
+```
+bash ./step8.bash \
+	  --mutations_list ./output/directory_6/mutations_<sample>.csv \
+	  --mutations_reads ./output/directory_6/<sample>_meta_reads.tsv \
+	  --SNPs_vcf ./output/directory_3/<sample>_SM_bwa_RawSNPs_FLTR_SNP.vcf \
+	  --out_dir ./output/directory_8/ \
+	  --sc_DP_filter 5 \
+	  --exome_DP_filter 50 \
+	  --exome_bam_file ./output/directory_1/<sample>_SM_bwa.bam \
+	  --num_core <int>
+```
+
+#### Step 9
+Usage:
+```
+bash ./step9.bash \
+	  --mutations_df ./output/directory_8/filtered_mutations.csv \
+	  --out_dir ../output/directory_9/
+```
+
+#### Step 10
+NOTE: needs to be run separately on each cell's bam file, and generates a large number of small temporary files that automatically get deleted at the end.
+Usage:
+```
+bash ./step10.bash \
+	  ./output/directory_2/<bc>.bam
+    ./output/directory_10/
+    ./output/directory_10/tmp_<bc>
+    5 # depth threshold
+```
