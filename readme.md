@@ -34,4 +34,42 @@ This method was implemented in ten steps:
 ### Running it step by step
 
 #### Step 1
-Usage `ffdfd`
+Usage:
+```bash ./step1.bash \
+  --sample <sample_name> \
+  --exome_dir ./directory/containing/fastqs \
+  --aligned_dir ./output/directory_1 \
+  --ref_file ./path/to/reference/fasta.fa \
+  --num_cores <int> \
+  --r1_filename r1.fq.gz \
+  --r2_filename r1.fq.gz```
+
+#### Step 2
+Usage:
+```bash ./step2.bash \
+  --sample <sample_name> \
+  --barcode_list ./list/of/barcodes.txt \
+  --bigbam ./path/to/cellranger/possorted.bam \
+  --out ./output/directory_2 \
+  --num_cores 1```
+
+#### Step 4
+NOTE: this step does not create a new output directory, it just adds file to the step 3 output directory.
+Usage:
+```bash ./step4.bash \
+  --sample <sample_name> \
+  --step3_out ./output/directory_3 \
+  --ref_file ./path/to/reference/fasta.fa```
+
+#### Step 5
+NOTE: this step does not create a new output directory, it just adds file to the step 3 output directory.
+Usage:
+```bash step5.bash \
+   --sample <sample_name> \
+   --step2_out ./output/directory_2 \
+   --bc_list ./list/of/barcodes.txt \
+   --out_dir ./output/directory_5 \
+   --ref_fasta ./path/to/reference/fasta.fa \
+   --ref_bam ./output/bam/from_step4.bam \
+   --possorted_read_group <sample_name>_combined \ # be sure to remember to add "combined"!
+   --num_core <int>```
